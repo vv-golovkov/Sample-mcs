@@ -1,0 +1,27 @@
+services:
+
+  m1service:
+    env_file: .env
+    build: ./m1-service
+    networks: [ backend ]
+    restart: unless-stopped
+    container_name: m1service
+    ports: [ "${M1_SERVICE_PORT}:8080" ]
+
+  m2service:
+    env_file: .env
+    build: ./m2-service
+    networks: [ backend ]
+    restart: unless-stopped
+    container_name: m2service
+    ports: [ "${M2_SERVICE_PORT}:8080" ]
+
+  m3service:
+    env_file: .env
+    build: ./m3-service
+    networks: [ backend ]
+    restart: unless-stopped
+    container_name: m3service
+    ports: [ "${M3_SERVICE_PORT}:8080" ]
+
+networks: { backend: { driver: bridge } } #default driver - bridge
