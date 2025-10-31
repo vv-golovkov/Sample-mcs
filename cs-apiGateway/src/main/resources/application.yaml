@@ -1,0 +1,37 @@
+spring.application.name: cs-apiGateway
+
+spring:
+  cloud:
+    gateway:
+      #      discovery:
+      #        locator:
+      #          enabled: true #eureka config
+      #          lower-case-service-id: true
+      # Тепер запит /m1service/** → Eureka шукає активний інстанс m1service.
+      # Якщо user-service перезапустився на новому порту, Gateway автоматично проксить на нову адресу.
+      server:
+        webflux:
+          routes:
+
+          - id: m1-service
+            uri: http://m1service:8080
+            predicates: [ Path=/m1/** ]
+            filters: [ StripPrefix=1 ]
+
+          - id: m2-service
+            uri: http://m2service:8080
+            predicates: [ Path=/m2/** ]
+            filters: [ StripPrefix=1 ]
+
+          - id: m3-service
+            uri: http://m3service:8080
+            predicates: [ Path=/m3/** ]
+            filters: [ StripPrefix=1 ]
+
+  # Налаштування Spring Boot Actuator, яке визначає доступні ендпоінти через HTTP.
+  # http://localhost:8090/actuator/health
+  # http://localhost:8090/actuator/info (404 dy default, needs to be configured separately)
+  # http://localhost:8090/actuator/gateway/routes (працює тільки зі старим WebFlux Gateway маршрутизатором,
+  # тобто очікує spring.cloud.gateway.routes без server.webflux. Саме тому він зараз 404)
+management: { endpoints: { web: { exposure: { include: health,info,gateway } } } }
+#eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }

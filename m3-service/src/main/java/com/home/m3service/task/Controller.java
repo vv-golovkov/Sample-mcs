@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/s3")
+//@RequestMapping("/s3")
 public class Controller {
 
     @SneakyThrows

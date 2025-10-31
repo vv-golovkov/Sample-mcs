@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/s2")
+//@RequestMapping("/s2")
 public class Controller {
 
     @SneakyThrows
     @GetMapping("/ping")
     public String ping() {
-        Thread.sleep(5000L);
+        Thread.sleep(3000L);
         return "pong2";
     }
 }

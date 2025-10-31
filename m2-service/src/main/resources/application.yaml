@@ -1,0 +1,3 @@
+spring.application.name: m2-service
+#spring: { cloud: { discovery: { client: { enabled: true } } } }
+#eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }

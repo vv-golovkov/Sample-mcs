@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
-@RequestMapping("/s1")
+//@RequestMapping("/s1")
 public class Controller {
     private final WebClient m2ServiceClient;
     private final WebClient m3ServiceClient;
@@ -21,7 +21,7 @@ public class Controller {
         this.m3ServiceClient = m3ServiceClient;
     }
 
-    @GetMapping("/pingAsync")
+    @GetMapping("/ping")
     public String pingAsync() {
         Mono<String> m2Response = callM2Service();
         Mono<String> m3Response = callM3Service();
@@ -33,11 +33,11 @@ public class Controller {
     }
 
     private Mono<String> callM2Service() {
-        return m2ServiceClient.get().uri("/s2/ping").retrieve().bodyToMono(String.class);
-        //.block()
+        return m2ServiceClient.get().uri("/ping").retrieve().bodyToMono(String.class);
+        //.block() - synchronous call
     }
 
     private Mono<String> callM3Service() {
-        return m3ServiceClient.get().uri("/s3/ping").retrieve().bodyToMono(String.class);
+        return m3ServiceClient.get().uri("/ping").retrieve().bodyToMono(String.class);
     }
 }

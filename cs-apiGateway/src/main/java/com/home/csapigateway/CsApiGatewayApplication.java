@@ -1,14 +1,13 @@
-package com.home.m2service;
+package com.home.csapigateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@EnableEurekaClient
 @SpringBootApplication
-public class M2ServiceApplication {
+public class CsApiGatewayApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(M2ServiceApplication.class, args);
+		SpringApplication.run(CsApiGatewayApplication.class, args);
 	}
 
 }
