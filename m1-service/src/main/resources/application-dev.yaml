@@ -1,0 +1,11 @@
+#еквівалент -> logging.level: { com.home.m1service: TRACE, org.springframework: DEBUG }
+logging.level:
+  com.home.m1service: TRACE
+
+cs:
+  myName: m1vitaliyDEV
+  url:
+    m2service: http://m2service:8080
+    m3service: http://m3service:8080
+  some1:
+    myParam: param1valueDEV

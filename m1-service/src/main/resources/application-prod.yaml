@@ -1,0 +1,10 @@
+logging.level:
+  com.home.m1service: DEBUG
+
+cs:
+  myName: m1vitaliyPROD
+  url:
+    m2service: http://m2service:8080
+    m3service: http://m3service:8080
+  some1:
+    myParam: param1valuePROD

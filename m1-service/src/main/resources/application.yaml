@@ -1,3 +1,9 @@
+# application.yml — це базовий (default) файл конфігурації, який Spring Boot завжди завантажує першим.
+# Усі інші профілі (application-docker.yml, application-prod.yml) — розширюють або перевизначають його.
+# Залишай application.yml максимально чистим — лише спільні речі.
+
 spring.application.name: m1-service
 #spring: { cloud: { discovery: { client: { enabled: true } } } }
 #eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }
+
+logging.level.root: INFO #для вісх пакетів, для яких нижче НЕ задано рівень
