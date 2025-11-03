@@ -2,8 +2,17 @@
 # Усі інші профілі (application-docker.yml, application-prod.yml) — розширюють або перевизначають його.
 # Залишай application.yml максимально чистим — лише спільні речі.
 
-spring.application.name: m1-service
-#spring: { cloud: { discovery: { client: { enabled: true } } } }
-#eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }
+# spring: { cloud: { discovery: { client: { enabled: true } } } }
+# eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }
 
-logging.level.root: INFO #для вісх пакетів, для яких нижче НЕ задано рівень
+# logging.level.root: INFO #для вісх пакетів, для яких нижче НЕ задано рівень
+
+spring:
+  application:
+    name: m1-service
+  # config: # SPRING_CONFIG_IMPORT - already defined as environment variable in '.env'
+    # with 'optional:configserver', container will start even if config-server is down
+    # import: "configserver:http://cs-config-server:8080/"
+#  cloud:
+#    config:
+#      fail-fast: true # TRUE - app will fail to start if it cannot connect to config-server

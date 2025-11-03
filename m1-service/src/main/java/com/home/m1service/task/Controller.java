@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 public class Controller {
     private final WebClient m2ServiceClient;
     private final WebClient m3ServiceClient;
-    @Value("${cs.myName}") // One option. Another - see ConfigurationRegistry.class
-    private String myName;
+    @Value("${cs.m1Name}") // One injection way. Another - see ConfigurationRegistry.class
+    private String m1Name;
 
     public Controller(@Qualifier("m2ServiceClient") WebClient m2ServiceClient,
                       @Qualifier("m3ServiceClient") WebClient m3ServiceClient) {
@@ -24,17 +24,16 @@ public class Controller {
 
     @GetMapping("/ping")
     public String pingAsync() {
-        log.trace("I log trace");
-        log.debug("I log debug");
-        log.info("I log info");
-        //-----------------------
-        log.debug("Received '/ping' request in m1Service. myName={}", myName);
+        log.trace("trace logging");
+        log.debug("debug logging");
+        log.info("info logging");
+        //-------------------------
         Mono<String> m2Response = callM2Service();
         Mono<String> m3Response = callM3Service();
         return Mono.zip(m2Response, m3Response).map(set -> {
             String responseFromM2 = set.getT1();
             String responseFromM3 = set.getT2();
-            return responseFromM2 + " | " + responseFromM3;
+            return responseFromM2 + " | " + responseFromM3 + " | " + m1Name;
         }).block();
     }
 

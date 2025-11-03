@@ -1,6 +1,6 @@
-spring.application.name: cs-apiGateway
-
 spring:
+  application:
+    name: cs-apiGateway
   cloud:
     gateway:
       #      discovery:

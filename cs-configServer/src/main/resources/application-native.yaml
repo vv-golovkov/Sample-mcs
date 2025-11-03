@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
+            # make sure it is copied to container in Dockerfile
+            - file:/app/config-repo/{application}
+            - file:/app/config-repo/ # але канфіги з {application} мають пріоритет перез кореневими

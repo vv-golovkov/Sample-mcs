@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/vv-golovkov/config-repo.git
+          default-label: main
+          searchPaths:
+            - "{application}"
+            - "." # але канфіги з {application} мають пріоритет перез кореневими
+          # username: your-git-username (for private repo only)
+          # password: your-git-password-or-token (for private repo only)

@@ -1,13 +1,20 @@
-#-----build
+# ===== BUILD STAGE =====
 FROM maven:3.9.9-eclipse-temurin-22-alpine AS build
 WORKDIR /app
-COPY pom.xml .
-#COPY ../openapi /app/openapi
+
+# because of change in context in docker-compose.yaml to see the root of Sample-mcs
+# COPY pom.xml .
+COPY cs-configServer/pom.xml .
+
 RUN mvn dependency:go-offline -B
-COPY src ./src
+
+# because of change in context in docker-compose.yaml to see the root of Sample-mcs
+# COPY src ./src
+COPY cs-configServer/src ./src
+
 RUN mvn clean package -DskipTests
 
-#-----run
+# ===== RUN STAGE =====
 FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app
 
@@ -15,7 +22,9 @@ WORKDIR /app
 RUN apk add --no-cache curl
 
 COPY --from=build /app/target/*.jar app.jar
-#COPY --from=build /app/openapi /app/openapi
+
+# if using local config files
+COPY config-repo /app/config-repo
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

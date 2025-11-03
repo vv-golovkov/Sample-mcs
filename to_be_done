@@ -1,0 +1,18 @@
+1.Share common object/s between microservices (PersonDTO, etc..)
+    1.1.Create a shared library or package
+    1.2.Generate from yaml/json schema
+2.Refresh server-config on the fly without restart
+==================================================================
+2.Implement distributed tracing
+3.Set up centralized logging
+4.Configure service discovery
+5.Implement circuit breaker pattern
+7.Configure load balancing
+8.Implement rate limiting
+9.Set up health checks and monitoring
+10.Implement security best practices (e.g., OAuth, JWT)
+11.Implement data synchronization between services
+12.Set up CI/CD pipeline for microservices
+13.Implement versioning for microservices
+14.Configure container orchestration (e.g., Kubernetes)
+15.Set up automated testing for microservices
