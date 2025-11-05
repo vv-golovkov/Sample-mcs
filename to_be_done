@@ -2,6 +2,7 @@
     1.1.Create a shared library or package
     1.2.Generate from yaml/json schema
 2.Refresh server-config on the fly without restart
+3.Normalize Slf4j logging pattern
 ==================================================================
 2.Implement distributed tracing
 3.Set up centralized logging

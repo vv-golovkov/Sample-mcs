@@ -19,17 +19,43 @@
     </properties>
     <dependencies>
 <!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--            <groupId>com.home</groupId>-->
+<!--            <artifactId>cs-common</artifactId>-->
+<!--            <version>1.1</version>-->
 <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>io.github.resilience4j</groupId>-->
+        <!--            <artifactId>resilience4j-spring-boot3</artifactId>-->
+        <!--        </dependency>-->
+
+        <!--If you already use Spring Cloud (Eureka, Config Server, Gateway) and want an unify abstraction for them all + circuitBreaker, use starter-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <!-- <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId> -->
+            <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-web</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
@@ -84,44 +110,44 @@
                     </excludes>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.openapitools</groupId>-->
-<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--                <version>7.3.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>generate-models</id>-->
-<!--                        <goals>-->
-<!--                            <goal>generate</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <inputSpec>${project.basedir}/../openapi/person.yaml</inputSpec>-->
-<!--                            <generatorName>java</generatorName>-->
-<!--                            <library>native</library>-->
-<!--                            <modelNameSuffix>DTO</modelNameSuffix>-->
-<!--                            <modelPackage>com.home.m1service.model</modelPackage>-->
-<!--                            <apiPackage>com.home.m1service.api</apiPackage> &lt;!&ndash; even when generateApis=false &ndash;&gt;-->
-<!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
-<!--                            <addCompileSourceRoot>true</addCompileSourceRoot>-->
-<!--                            <generateApis>false</generateApis>-->
-<!--                            <generateModels>true</generateModels>-->
-<!--                            <generateSupportingFiles>false</generateSupportingFiles>-->
-<!--                            <generateModelTests>false</generateModelTests>-->
-<!--                            <generateModelDocumentation>false</generateModelDocumentation>-->
-<!--                            <configOptions>-->
-<!--                                <serializableModel>true</serializableModel>-->
-<!--                                <modelOnly>true</modelOnly>-->
-<!--                                <javaVersion>22</javaVersion>-->
-<!--                                <useJakartaEe>true</useJakartaEe>-->
-<!--                                <useGson>false</useGson>-->
-<!--                                <serializationLibrary>jackson</serializationLibrary>-->
-<!--                                <dateLibrary>java8</dateLibrary> &lt;!&ndash; назва шаблону &ndash;&gt;-->
-<!--                                <useLombok>true</useLombok>-->
-<!--                            </configOptions>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.openapitools</groupId>-->
+            <!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+            <!--                <version>7.3.0</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>generate-models</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>generate</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <inputSpec>${project.basedir}/../openapi/person.yaml</inputSpec>-->
+            <!--                            <generatorName>java</generatorName>-->
+            <!--                            <library>native</library>-->
+            <!--                            <modelNameSuffix>DTO</modelNameSuffix>-->
+            <!--                            <modelPackage>com.home.m1service.model</modelPackage>-->
+            <!--                            <apiPackage>com.home.m1service.api</apiPackage> &lt;!&ndash; even when generateApis=false &ndash;&gt;-->
+            <!--                            <output>${project.build.directory}/generated-sources/openapi</output>-->
+            <!--                            <addCompileSourceRoot>true</addCompileSourceRoot>-->
+            <!--                            <generateApis>false</generateApis>-->
+            <!--                            <generateModels>true</generateModels>-->
+            <!--                            <generateSupportingFiles>false</generateSupportingFiles>-->
+            <!--                            <generateModelTests>false</generateModelTests>-->
+            <!--                            <generateModelDocumentation>false</generateModelDocumentation>-->
+            <!--                            <configOptions>-->
+            <!--                                <serializableModel>true</serializableModel>-->
+            <!--                                <modelOnly>true</modelOnly>-->
+            <!--                                <javaVersion>22</javaVersion>-->
+            <!--                                <useJakartaEe>true</useJakartaEe>-->
+            <!--                                <useGson>false</useGson>-->
+            <!--                                <serializationLibrary>jackson</serializationLibrary>-->
+            <!--                                <dateLibrary>java8</dateLibrary> &lt;!&ndash; назва шаблону &ndash;&gt;-->
+            <!--                                <useLombok>true</useLombok>-->
+            <!--                            </configOptions>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

@@ -1,3 +1,9 @@
+# http://localhost:8888/cs-config-server/default
+
+logging.level:
+  # to reduce log noise
+  org.springframework.cloud.config.server.environment.NativeEnvironmentRepository: WARN
+
 spring:
   application:
     name: cs-configServer

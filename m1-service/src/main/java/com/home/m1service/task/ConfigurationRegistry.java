@@ -16,9 +16,9 @@ public class ConfigurationRegistry {
 
     @PostConstruct
     public void logConfigs() {
-        log.info("=== Loaded Configuration Properties ===");
-        log.info("WebClientConfig: {}", webClientConfig);
-        log.info("CustomConfig: {}", customConfig);
+        log.info("========================================");
+        log.info("{}", webClientConfig);
+        log.info("{}", customConfig);
         log.info("========================================");
     }
 }

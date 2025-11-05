@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+{
+    ... default fields ...
+
+    "traceId": "xyz789" - unique across services
+    "spanId": "abc4567" - unique per ?
+
+    "app": "m1service",
+    "profile": "dev",
+    "env": "?",
+    "git": "a1b2c3d4",
+    "pod": "pod12345",
+}
+-->
+
+<configuration scan="true" scanPeriod="30 seconds"> <!-- ... scan="true" scanPeriod="30 seconds" - dynamic changes -->
+
+    <!-- include spring boot defaults (required) -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- internals: spring boot -->
+    <springProperty name="SERVICE_NAME" source="spring.application.name" defaultValue="unk1"/>
+    <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="unk2"/>
+
+    <!-- externals: Kubernetes, Docker, CI/CD -->
+    <property name="ENV" value="${ENV:-unk3}"/>
+    <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk4}"/>
+    <property name="POD_NAME" value="${POD_NAME:-unk5}"/>
+
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>spanId</includeMdcKeyName>
+            <customFields>
+                {
+                "app": "${SERVICE_NAME}",
+                "profile": "${ACTIVE_PROFILE}",
+                "env": "${ENV}",
+                "git": "${GIT_COMMIT}",
+                "pod": "${POD_NAME}"
+                }
+            </customFields>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="JSON_CONSOLE"/>
+    </root>
+
+</configuration>

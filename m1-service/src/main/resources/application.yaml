@@ -2,17 +2,64 @@
 # Усі інші профілі (application-docker.yml, application-prod.yml) — розширюють або перевизначають його.
 # Залишай application.yml максимально чистим — лише спільні речі.
 
+# -----
 # spring: { cloud: { discovery: { client: { enabled: true } } } }
 # eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }
-
 # logging.level.root: INFO #для вісх пакетів, для яких нижче НЕ задано рівень
+# -----
 
 spring:
   application:
     name: m1-service
-  # config: # SPRING_CONFIG_IMPORT - already defined as environment variable in '.env'
-    # with 'optional:configserver', container will start even if config-server is down
-    # import: "configserver:http://cs-config-server:8080/"
-#  cloud:
-#    config:
-#      fail-fast: true # TRUE - app will fail to start if it cannot connect to config-server
+    # SPRING_CONFIG_IMPORT - already defined as environment variable in '.env'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,circuitbreakers,metrics
+
+# http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.slow.calls?tag=name:circuitBreakerForM2ServiceCall
+# http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.calls?tag=name:circuitBreakerForM2ServiceCall
+# https://resilience4j.readme.io/docs/circuitbreaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      circuitBreakerForM2ServiceCall:
+        failureRateThreshold: 50 # percentage of failed calls (def=50%)
+        slowCallRateThreshold: 25 # percentage of slow calls (def=100%)
+        slowCallDurationThreshold: 2s # calls taking longer than this duration are considered slow (def=60s)
+        permittedNumberOfCallsInHalfOpenState: 2 # number of permitted calls when CB is in the HALF_OPEN state (def=10)
+        maxWaitDurationInHalfOpenState: 0 # max time the CB is allowed to remain in HALF_OPEN state before it is automatically forced back into the OPEN state (def=0 - unlimited)
+        slidingWindowType: COUNT_BASED # type of sliding window used to record call outcomes: COUNT_BASED, TIME_BASED (def=COUNT_BASED)
+        slidingWindowSize: 100 # size of sliding window. If COUNT_BASED, it is number of calls. If TIME_BASED, it is duration in seconds (def=100)
+        minimumNumberOfCalls: 4 # minimum number of calls required in sliding window before the failure rate is calculated (def=100)
+        waitDurationInOpenState: 30s # time the CB waits in the OPEN state before transitioning to HALF_OPEN (def=60s)
+        automaticTransitionFromOpenToHalfOpenEnabled: true # whether the CB automatically transitions from OPEN to HALF_OPEN after waitDurationInOpenState (def=false)
+        # The size of a circular buffer that stores the latest circuit breaker events.
+        # These stored events can be viewed via Actuator endpoint '/actuator/circuitbreakerevents'.
+        eventConsumerBufferSize: 10 # by default, it keeps only the most recent 10 events (def=10)
+        registerHealthIndicator: true # integrates the CB's state into Spring Boot Actuator's endpoint: /actuator/health
+        # recordExceptions: List of exception types that should be recorded as failures. Default: (all codes except 2xx/3xx)
+        # ignoreExceptions: List of exception types that should be ignored and not count as failures. Default: Empty list
+        # recordFailurePredicate: Custom predicate to determine if a call should be recorded as a failure. Default: Records all exceptions as failures.
+        # ignoreExceptionPredicate: Custom predicate to determine if an exception should be ignored. Default: Ignores no exceptions.
+  timelimiter:
+    instances:
+      circuitBreakerForM2ServiceCall:
+        timeoutDuration: 4s # (def=1s)
+        cancelRunningFuture: false # whether to cancel the running future when a timeout occurs (def=false)
+        eventConsumerBufferSize: 10
+        registerHealthIndicator: true
+
+# turn off TimeLimiter
+# spring.cloud.circuitbreaker.resilience4j.enabled-time-limiter=false
+
+  # ----------------------------------------------------------------------------------------------------------------------
+  # Difference between 'resilience4j.circuitbreaker.slowCallDurationThreshold' і 'timelimiter.timeoutDuration':
+  # 1
+  # a) Виклик НЕ переривається (він продовжує виконуватися до завершення).
+  # b) Для статистики він позначається як "повільний".
+  # 2
+  # a) Виклик переривається (викидається TimeoutException).
+  # b) Для статистики він позначається як "невдалий".

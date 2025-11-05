@@ -2,6 +2,7 @@ x-common-service: &common
   env_file: .env
   networks: [ backend ]
   restart: no # [no, always, on-failure, unless-stopped]
+  environment: [TZ=Europe/Kyiv] # by default - UTC
 
 services:
 
