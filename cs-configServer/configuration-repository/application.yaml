@@ -3,7 +3,7 @@ logging:
     root: info
   # file: name: logs/app.log
   pattern:
-    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}msS [%thread] [%-5level | %logger{1}]@> %msg%n"
+    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread] [%-5level | %logger{1}]@> %msg%n"
     # %location, %method, %line, %file, @caller - very expensive!
     # %mdc{requestId} - analog for %X in log4j
 
@@ -20,4 +20,4 @@ management:
       enabled: true
 
 # common parameters for all
-cs.forall: m1m2m3NEW
+cs.forall: m1m2m3ABC
