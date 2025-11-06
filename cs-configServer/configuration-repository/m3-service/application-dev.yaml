@@ -1,0 +1,4 @@
+logging.level:
+  com.home.m3service: TRACE
+
+cs.m3Name: n3dev

@@ -7,12 +7,3 @@ logging.level:
 spring:
   application:
     name: cs-configServer
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,env
-  endpoint:
-    health:
-      show-details: always

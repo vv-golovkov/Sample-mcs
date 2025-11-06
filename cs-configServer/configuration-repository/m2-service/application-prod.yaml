@@ -1,0 +1,4 @@
+logging.level:
+  com.home.m2service: DEBUG
+
+cs.m2Name: n2prod

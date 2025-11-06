@@ -2,13 +2,15 @@ x-common-service: &common
   env_file: .env
   networks: [ backend ]
   restart: no # [no, always, on-failure, unless-stopped]
-  environment: [TZ=Europe/Kyiv] # by default - UTC
+  environment: [ TZ=Europe/Kyiv ] # by default - UTC
 
 services:
 
   m1service:
     <<: *common
-    build: ./m1-service
+    build:
+      context: .
+      dockerfile: m1-service/Dockerfile
     container_name: m1service
     ports: [ "${M1_SERVICE_PORT}:8080" ]
     depends_on:
@@ -45,9 +47,9 @@ services:
     networks: [ backend ]
     restart: no # [no, always, on-failure, unless-stopped]
     # перезаписує профіль в '.env', бо має свої власні [native, git]
-    environment: [ SPRING_PROFILES_ACTIVE=native ] # ПРІОРИТЕТИ: environment(найвищий) -> .env -> application.yml
+    environment: [ SPRING_PROFILES_ACTIVE=git ] # ПРІОРИТЕТИ: environment(найвищий) -> .env -> application.yml
     build:
-      context: . # path to the root of Sample-msc to see 'config-repo' folder
+      context: .
       dockerfile: cs-configServer/Dockerfile
     container_name: cs-config-server
     ports: [ "8888:8080" ]

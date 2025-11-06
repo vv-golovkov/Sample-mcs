@@ -1,8 +1,8 @@
 1.Share common object/s between microservices (PersonDTO, etc..)
-    1.1.Create a shared library or package
+    +1.1.Create a shared module
     1.2.Generate from yaml/json schema
 2.Refresh server-config on the fly without restart
-3.Normalize Slf4j logging pattern
++3.Slf4j: traceId/spanId does not work! (may be due to webflux?)
 ==================================================================
 2.Implement distributed tracing
 3.Set up centralized logging

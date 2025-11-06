@@ -1,0 +1,4 @@
+logging.level:
+  com.home.m3service: DEBUG
+
+cs.m3Name: n3prod

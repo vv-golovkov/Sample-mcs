@@ -1,0 +1,23 @@
+logging:
+  level:
+    root: info
+  # file: name: logs/app.log
+  pattern:
+    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}msS [%thread] [%-5level | %logger{1}]@> %msg%n"
+    # %location, %method, %line, %file, @caller - very expensive!
+    # %mdc{requestId} - analog for %X in log4j
+
+# not recommended to open endpoint and show details in PROD
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+
+# common parameters for all
+cs.forall: m1m2m3NEW

@@ -37,5 +37,5 @@ spring:
   # http://localhost:8090/actuator/info (404 dy default, needs to be configured separately)
   # http://localhost:8090/actuator/gateway/routes (працює тільки зі старим WebFlux Gateway маршрутизатором,
   # тобто очікує spring.cloud.gateway.routes без server.webflux. Саме тому він зараз 404)
-management: { endpoints: { web: { exposure: { include: health,info,gateway } } } }
+#management: { endpoints: { web: { exposure: { include: health,info,gateway } } } }
 #eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }

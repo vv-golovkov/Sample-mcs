@@ -3,11 +3,12 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/vv-golovkov/config-repo.git
+          # uri: https://github.com/vv-golovkov/config-repo.git
+          uri: https://github.com/vv-golovkov/Sample-mcs.git
           default-label: main
           searchPaths:
-            - "{application}"
-            - "." # але канфіги з {application} мають пріоритет перез кореневими
+            - "cs-configServer/configuration-repository/{application}"
+            - "cs-configServer/configuration-repository" # or "."
           refresh-rate: 30 # automatic 'git fetch' each N-seconds (OPTIONAL)
           # username: your-git-username (for private repo only)
           # password: your-git-password-or-token (for private repo only)

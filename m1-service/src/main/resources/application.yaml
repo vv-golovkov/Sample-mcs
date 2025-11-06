@@ -13,12 +13,6 @@ spring:
     name: m1-service
     # SPRING_CONFIG_IMPORT - already defined as environment variable in '.env'
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,circuitbreakers,metrics
-
 # http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.slow.calls?tag=name:circuitBreakerForM2ServiceCall
 # http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.calls?tag=name:circuitBreakerForM2ServiceCall
 # https://resilience4j.readme.io/docs/circuitbreaker
@@ -52,8 +46,8 @@ resilience4j:
         eventConsumerBufferSize: 10
         registerHealthIndicator: true
 
-# turn off TimeLimiter
-# spring.cloud.circuitbreaker.resilience4j.enabled-time-limiter=false
+  # turn off TimeLimiter
+  # spring.cloud.circuitbreaker.resilience4j.enabled-time-limiter=false
 
   # ----------------------------------------------------------------------------------------------------------------------
   # Difference between 'resilience4j.circuitbreaker.slowCallDurationThreshold' і 'timelimiter.timeoutDuration':

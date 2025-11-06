@@ -24,7 +24,8 @@ RUN apk add --no-cache curl
 COPY --from=build /app/target/*.jar app.jar
 
 # if using local config files
-COPY config-repo /app/config-repo
+# COPY cs-configServer/config-repo /app/config-repo
+COPY cs-configServer/configuration-repository /app/config-repo
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
