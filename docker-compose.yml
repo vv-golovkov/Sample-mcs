@@ -47,7 +47,7 @@ services:
     networks: [ backend ]
     restart: no # [no, always, on-failure, unless-stopped]
     # перезаписує профіль в '.env', бо має свої власні [native, git]
-    environment: [ SPRING_PROFILES_ACTIVE=native ] # ПРІОРИТЕТИ: environment(найвищий) -> .env -> application.yml
+    environment: [ SPRING_PROFILES_ACTIVE=git ] # ПРІОРИТЕТИ: environment(найвищий) -> .env -> application.yml
     build:
       context: .
       dockerfile: cs-configServer/Dockerfile

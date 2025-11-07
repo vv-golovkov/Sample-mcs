@@ -3,12 +3,19 @@ spring:
     config:
       server:
         git:
-          # uri: https://github.com/vv-golovkov/config-repo.git
           uri: https://github.com/vv-golovkov/Sample-mcs.git
           default-label: main
           searchPaths:
             - "cs-configServer/configuration-repository/{application}"
             - "cs-configServer/configuration-repository" # or "."
+
+          # username: usr (for private repo only)
+          # password: pwd OR token (for private repo only)
+
+          # FYI:
+          # ConfigServer has its own local cache, which is updated each 'refresh-rate' seconds.
+          # But microservices do not receive updated values right away, because Spring is already initialized.
+          # For microservice to receive all updated changes from local cache, we need to manually call one of the next:
+          # 1) curl -X POST http://localhost:8090/m1/actuator/refresh - for each microservice. -OR-
+          # 2) curl -X POST http://config-server:8888/actuator/bus-refresh - once, but requires 'rabbitmq' starter.
           refresh-rate: 30 # automatic 'git fetch' each N-seconds (OPTIONAL)
-          # username: your-git-username (for private repo only)
-          # password: your-git-password-or-token (for private repo only)

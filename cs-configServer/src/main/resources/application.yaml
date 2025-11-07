@@ -2,7 +2,9 @@
 
 logging.level:
   # to reduce log noise
-  org.springframework.cloud.config.server.environment.NativeEnvironmentRepository: WARN
+  org.springframework.cloud.config.server.environment.NativeEnvironmentRepository: warn
+  org.springframework.cloud.config.server.environment: debug # MultipleJGitEnvironmentRepository
+  org.springframework.cloud.config.server.support.GitCredentialsProviderFactory: warn
 
 spring:
   application:

@@ -1,6 +1,7 @@
 logging:
   level:
     root: info
+    org.springframework.cloud.config.client.ConfigServerConfigDataLoader: warn
   # file: name: logs/app.log
   pattern:
     console: "%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread] [%-5level | %logger{1}]@> %msg%n"

@@ -24,13 +24,14 @@ public class Sender {
         //by default: ReactiveCircuitBreaker in Spring Cloud uses both 'CircuitBreaker+TimeLimiter[1s]'
     }
 
+    //@CircuitBreaker - uses Spring AOP.
     //@CircuitBreaker(name = "circuitBreakerForM2ServiceCall", fallbackMethod = "fallback") - not works with reactor
     public Mono<String> callM2Service_circuitBreaker(String p) {
         return circuitBreaker.run(callM2Service("/rnd/{p}", p), t -> fallback(p, t));
     }
 
-    public Mono<String> fallback(String p, Throwable t) {
-        return Mono.just("Try later [%s: %s]".formatted(t.getClass().getSimpleName(), t.getMessage()));
+    public Mono<String> fallback(String p, Throwable t) { //rules: in same class, same signature + Throwable
+        return Mono.just("Try later [%s - %s]".formatted(t.getClass().getSimpleName(), t.getMessage()));
         //---->Possible Exceptions in m2controller.random():
         //---->CallNotPermittedException: CircuitBreaker is OPEN and does not permit further calls
         //un ->WebClientResponseException$InternalServerError

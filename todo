@@ -1,16 +1,15 @@
-1.Share common object/s between microservices (PersonDTO, etc..)
-    +1.1.Create a shared module
-    1.2.Generate from yaml/json schema
-2.Refresh server-config on the fly without restart
-+3.Slf4j: traceId/spanId does not work! (may be due to webflux?)
+1.Generate DTOs from yaml/json schema
+2.CircuitBreaker (TimeLimiter, RateLimiter, Retry, Bulkhead)
+3.ELK stack (+ traceId/spanId) -> (does not work, may be due to webflux?)
+
+-maven cache
+-logger scan (docker copy)
+-custom healthCheck (by impl HealthIndicator/ReactiveHealthIndicator)
+-refresh configServer: use another option -> ( consul, jdbc, Vault[for secrets] )
 ==================================================================
-2.Implement distributed tracing
-3.Set up centralized logging
+3.SAGA
 4.Configure service discovery
-5.Implement circuit breaker pattern
 7.Configure load balancing
-8.Implement rate limiting
-9.Set up health checks and monitoring
 10.Implement security best practices (e.g., OAuth, JWT)
 11.Implement data synchronization between services
 12.Set up CI/CD pipeline for microservices

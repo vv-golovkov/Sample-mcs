@@ -7,8 +7,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @ConfigurationProperties("cs.url")
 public record WebClientConfig(String m2service, String m3service) {
-    //    private static final String M2_SERVICE_URL = "http://m2service:8080";
-    //    private static final String M3_SERVICE_URL = "http://m3service:8080";
 
     @Bean
     @Qualifier("m2ServiceClient")

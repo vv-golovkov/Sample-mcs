@@ -1,6 +1,7 @@
 package com.home.m1service.task;
 
 import com.home.common.MyPersonDTO;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +11,21 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor //generate constructors ONLY for FINAL vars
 public class Controller {
+    private final IConfig<String> customConfig;
     private final Sender sender;
     @Value("${cs.m1Name}") // One injection way. Another - see ConfigurationRegistry.class
     private String m1Name;
 
-    public Controller(Sender sender) {
-        this.sender = sender;
+    public String blockFallback(Throwable t) {
+        return "Fallback [%s - %s]".formatted(t.getClass().getSimpleName(), t.getMessage());
+    }
+
+    @GetMapping("/block")
+    public Mono<String> pingBlock() { //in webflux, method should always return Mono/Flux ( +never use .block() )
+        log.debug("pingBlock.start [{}, {}]", m1Name, customConfig.get());
+        return sender.callM3Service("/ping").doOnNext(r -> log.debug("pingBlock.finish: {}", r));
     }
 
     @GetMapping("/ping")
