@@ -2,8 +2,6 @@
 
 <configuration>
 
-<!--    <property name="CONSOLE_LOG_PATTERN" value="%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread][%-5level | %logger{1}]@> %m%n"/>-->
-    <property name="CONSOLE_LOG_PATTERN" value="${logging.pattern.console}"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/> <!-- (appender-ref=CONSOLE) -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/> <!-- (required) -->
     <!-- internals: spring boot (it works because file ends with '-spring') -->
