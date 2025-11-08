@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+<!--    <property name="CONSOLE_LOG_PATTERN" value="%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread][%-5level | %logger{1}]@> %m%n"/>-->
+    <property name="CONSOLE_LOG_PATTERN" value="${logging.pattern.console}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/> <!-- (appender-ref=CONSOLE) -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/> <!-- (required) -->
+    <!-- internals: spring boot (it works because file ends with '-spring') -->
+    <springProperty name="SERVICE_NAME" source="spring.application.name" defaultValue="unk1"/>
+    <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="unk2"/>
+    <!-- externals: Kubernetes, Docker, CI/CD -->
+    <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk4}"/>
+    <property name="POD_NAME" value="${POD_NAME:-unk5}"/>
+
+    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>spanId</includeMdcKeyName>
+            <customFields>
+                {
+                "app": "${SERVICE_NAME}",
+                "profile": "${ACTIVE_PROFILE}",
+                "git": "${GIT_COMMIT}",
+                "pod": "${POD_NAME}"
+                }
+            </customFields>
+        </encoder>
+    </appender>
+
+    <root level="${logging.level.root:-warn}">
+        <appender-ref ref="CONSOLE"/>
+        <!-- <appender-ref ref="JSON_CONSOLE"/> -->
+    </root>
+
+    <logger name="com.home.m1service" level="${logging.level.com.home.m1service}:-warn"/>
+    <logger name="com.home.m2service" level="${logging.level.com.home.m2service}:-warn"/>
+    <logger name="com.home.m3service" level="${logging.level.com.home.m3service}:-warn"/>
+
+</configuration>
