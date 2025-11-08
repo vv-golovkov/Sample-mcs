@@ -1,5 +1,5 @@
 logging.level:
-  com.home.m1service: TRACE
+  com.home.m1service: debug
 
 cs:
   m1Name: name1devG1
