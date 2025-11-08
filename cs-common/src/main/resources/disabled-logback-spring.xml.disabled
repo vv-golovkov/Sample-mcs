@@ -3,8 +3,8 @@
 <!-- scan="true" - to make it work, this XML should be visible externally. In my case, it is inside JAR (not works) -->
 <configuration>
     <!-- override the default CONSOLE_LOG_PATTERN with new pattern (useful for local view only) -->
-    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
     <!-- <property name="CONSOLE_LOG_PATTERN" value="%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread] [%-5level | %logger{1}]@> %msg%n"/>-->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <!-- include spring boot defaults (required) -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
@@ -32,7 +32,7 @@
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/> <!-- works only when included the console-appender.xml -->
-<!--        <appender-ref ref="JSON_CONSOLE"/>-->
+        <appender-ref ref="JSON_CONSOLE"/>
     </root>
 
 </configuration>
