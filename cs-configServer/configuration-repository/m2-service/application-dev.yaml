@@ -1,4 +1,4 @@
 logging.level:
-  com.home.m2service: TRACE
+  com.home.m2service: INFO
 
 cs.m2Name: n2dev
