@@ -1,0 +1,20 @@
+# dynamic update the configuration parameters (@RefreshScope)
+curl -X POST http://localhost:8090/m1/actuator/refresh
+# --------------------------------------------------------------------------------
+# dynamic update the logging leve (ROOT+custom)
+curl -X POST http://localhost:8090/m1/actuator/loggers/ROOT \
+-H "Content-Type: application/json" \
+-d '{"configuredLevel":"debug"}'
+
+curl -X POST http://localhost:8090/m1/actuator/loggers/com.home.m1service \
+-H "Content-Type: application/json" \
+-d '{"configuredLevel":"WARN"}'
+
+# verify
+http://localhost:8090/m1/actuator/loggers/ROOT
+http://localhost:8090/m1/actuator/loggers/com.home.m1service
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------

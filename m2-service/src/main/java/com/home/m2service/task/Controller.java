@@ -21,6 +21,11 @@ public class Controller {
     @SneakyThrows
     @GetMapping("/ping")
     public String ping() {
+        log.trace("m2:trace");
+        log.debug("m2:debug");
+        log.info("m2:info");
+        log.warn("m2:warn");
+
         log.debug("received ping request...");
         Thread.sleep(3000L);
         log.debug("replying success {}", m2Name);

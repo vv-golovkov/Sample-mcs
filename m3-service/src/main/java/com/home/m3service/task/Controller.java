@@ -17,6 +17,11 @@ public class Controller {
     @SneakyThrows
     @GetMapping("/ping")
     public String ping() {
+        log.trace("m3:trace");
+        log.debug("m3:debug");
+        log.info("m3:info");
+        log.warn("m3:warn");
+
         log.info("Controller3.ping..[{},{}]", m3Name, forAll);
         Thread.sleep(4000L);
         return "pong3[%s, %s]".formatted(m3Name, forAll);

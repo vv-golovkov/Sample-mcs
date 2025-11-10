@@ -1,10 +1,10 @@
 logging:
   level:
-    root: info # !! DYNAMIC !!
-    org.springframework.cloud.config.client.ConfigServerConfigDataLoader: warn
+    root: INFO
+    org.springframework.cloud.config.client.ConfigServerConfigDataLoader: WARN
   # file: name: logs/app.log
   pattern:
-    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}msx [%thread] [%-5level | %logger{1}]@> %msg%n" # !! DYNAMIC !!
+    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread] [%-5level | %logger{1}]@> %msg%n"
     # %location, %method, %line, %file, @caller - very expensive!
     # %mdc{requestId} - analog for %X in log4j
 
@@ -15,10 +15,12 @@ management:
       exposure:
         include: "*"
   endpoint:
-    health:
-      show-details: always
+    loggers:
+      enabled: true # for '/actuator/loggers/{}' only
     metrics:
       enabled: true
+    health:
+      show-details: always
 
 # common parameters for all
 cs.forall: m1m2m3ABC

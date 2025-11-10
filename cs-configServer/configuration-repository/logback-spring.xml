@@ -2,14 +2,16 @@
 
 <configuration>
 
+    <!--    <property name="CONSOLE_LOG_PATTERN" value="${logging.pattern.console}"/>-->
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/> <!-- (appender-ref=CONSOLE) -->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/> <!-- (required) -->
     <!-- internals: spring boot (it works because file ends with '-spring') -->
-    <springProperty name="SERVICE_NAME" source="spring.application.name" defaultValue="unk1"/>
-    <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="unk2"/>
+    <springProperty name="SERVICE_NAME" source="spring.application.name" defaultValue="unk"/>
+    <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="unk"/>
+    <springProperty name="LOGGING_LEVEL_ROOT" source="logging.level.root" defaultValue="INFO"/>
     <!-- externals: Kubernetes, Docker, CI/CD -->
-    <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk4}"/>
-    <property name="POD_NAME" value="${POD_NAME:-unk5}"/>
+    <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk}"/>
+    <property name="POD_NAME" value="${POD_NAME:-unk}"/>
 
     <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -26,13 +28,9 @@
         </encoder>
     </appender>
 
-    <root level="${logging.level.root:-warn}">
+    <root level="${LOGGING_LEVEL_ROOT}">
         <appender-ref ref="CONSOLE"/>
         <!-- <appender-ref ref="JSON_CONSOLE"/> -->
     </root>
-
-    <logger name="com.home.m1service" level="${logging.level.com.home.m1service}:-warn"/>
-    <logger name="com.home.m2service" level="${logging.level.com.home.m2service}:-warn"/>
-    <logger name="com.home.m3service" level="${logging.level.com.home.m3service}:-warn"/>
 
 </configuration>

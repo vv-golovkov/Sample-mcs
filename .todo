@@ -3,7 +3,6 @@
 3.ELK stack (+ traceId/spanId) -> (does not work, may be due to webflux?)
 
 -maven cache
--logger scan (docker copy)
 -custom healthCheck (by impl HealthIndicator/ReactiveHealthIndicator)
 -refresh configServer: use another option -> ( consul, jdbc, Vault[for secrets] )
 ==================================================================

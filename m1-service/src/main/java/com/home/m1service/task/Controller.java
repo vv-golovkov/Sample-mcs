@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor //generate constructors ONLY for FINAL vars
 public class Controller {
-    private final IConfig<String> customConfig;
+    private final ConfigurationRegistry configurationRegistry;
     private final Sender sender;
     @Value("${cs.m1Name}") // One injection way. Another - see ConfigurationRegistry.class
     private String m1Name;
@@ -24,7 +24,7 @@ public class Controller {
 
     @GetMapping("/block")
     public Mono<String> pingBlock() { //in webflux, method should always return Mono/Flux ( +never use .block() )
-        log.debug("pingBlock.start [{}, {}]", m1Name, customConfig.get());
+        log.debug("pingBlock.start [{}, {}]", m1Name, configurationRegistry.getCustomConfig().get());
         return sender.callM3Service("/ping").doOnNext(r -> log.debug("pingBlock.finish: {}", r));
     }
 
@@ -32,9 +32,10 @@ public class Controller {
     public Mono<String> pingAsync() {
         MyPersonDTO p = new MyPersonDTO("vg", 29);
 //        Object p = new Object();
-        log.trace("this is trace");
-        log.debug("this is debug");
-        log.info("this is info + {}", p);
+        log.trace("m2:trace");
+        log.debug("m2:debug");
+        log.info("m2:info + {}", p);
+        log.warn("m2:warn");
         //-------------------------
         Mono<String> m2Response = sender.callM2Service("/ping");
         Mono<String> m3Response = sender.callM3Service("/ping");
