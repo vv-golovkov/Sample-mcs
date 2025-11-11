@@ -2,6 +2,6 @@ logging.level:
   com.home.m1service: TRACE
 
 cs.properties:
-  m-name: IamDevX
-  m2-service-url: http://m2service:7070
-  m3-service-url: http://m3service:9090
+  m-name: IamDev
+  m2-service-url: http://m2service:8080
+  m3-service-url: http://m3service:8080
