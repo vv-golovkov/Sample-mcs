@@ -8,7 +8,6 @@ logging:
     # %location, %method, %line, %file, @caller - very expensive!
     # %mdc{requestId} - analog for %X in log4j
 
-# not recommended to open endpoint and show details in PROD
 management:
   endpoints:
     web:
@@ -22,5 +21,16 @@ management:
     health:
       show-details: always
 
-# common parameters for all
-cs.forall: m1m2m3ABC
+springdoc:
+  swagger-ui:
+    enabled: true
+    # http://host:port/swagger-ui/index.html (append '?urls.primaryName=m1doc' for specific controller)
+  api-docs:
+    enabled: true
+    # http://host:port/v3/api-docs (append '.yaml' to download) - All controllers in the project
+  group-configs:
+    - group: m1doc
+      paths-to-match:
+        - /api/m1doc/**
+    # http://host:port/v3/api-docs/m1doc - only for controller/s specified in 'paths-to-match'
+    # the 'paths-to-match' should match with @RequestMapping on specific controller

@@ -38,17 +38,35 @@ resilience4j:
         # ignoreExceptions: List of exception types that should be ignored and not count as failures. Default: Empty list
         # recordFailurePredicate: Custom predicate to determine if a call should be recorded as a failure. Default: Records all exceptions as failures.
         # ignoreExceptionPredicate: Custom predicate to determine if an exception should be ignored. Default: Ignores no exceptions.
-  timelimiter:
+
+  timelimiter: # limits the method execution time
     instances:
       circuitBreakerForM2ServiceCall:
-        timeoutDuration: 4s # (def=1s)
-        cancelRunningFuture: false # whether to cancel the running future when a timeout occurs (def=false)
+        timeoutDuration: 4s # обмежує час виконання самого зовнішнього виклику (def=1s)
+        cancelRunningFuture: true
         eventConsumerBufferSize: 10
         registerHealthIndicator: true
 
-  # turn off TimeLimiter
-  # spring.cloud.circuitbreaker.resilience4j.enabled-time-limiter=false
+  ratelimiter: # limits the number of calls allowed during a certain period of time
+    instances:
+      circuitBreakerForM2ServiceCall:
+        limitForPeriod: 5 # max number of requests allowed during 'limitRefreshPeriod'
+        limitRefreshPeriod: 10s # given period of time
+        timeoutDuration: 0ms # обмежує час очікування дозволу на виконання запиту (0 - recommended for react)
 
+  retry: # repeats execution in case of method failure
+    instances:
+      circuitBreakerForM2ServiceCall:
+        maxAttempts: 3 # attempts (example: if set to 5, it means -> 1 original + 4 retries)
+        waitDuration: 2s # waiting time between attempts
+        maxDuration: 30s # optional: overall waiting time for all attempts (additional config over maxAttempts+waitDuration)
+        # retryExceptions: # optional: list of exception types that should be indicated for retry
+
+  bulkhead: # controls number of parallel requests
+    instances:
+      circuitBreakerForM2ServiceCall:
+        maxConcurrentCalls: 20 # max number of parallel method call
+        maxWaitDuration: 100ms # how long to wait for free slot, when reached the maxConcurrentCalls
   # ----------------------------------------------------------------------------------------------------------------------
   # Difference between 'resilience4j.circuitbreaker.slowCallDurationThreshold' і 'timelimiter.timeoutDuration':
   # 1

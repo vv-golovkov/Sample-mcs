@@ -21,7 +21,7 @@ public class Sender {
         this.m2ServiceClient = m2ServiceClient;
         this.m3ServiceClient = m3ServiceClient;
         this.circuitBreaker = circuitBreakerFactory.create("circuitBreakerForM2ServiceCall");
-        //by default: ReactiveCircuitBreaker in Spring Cloud uses both 'CircuitBreaker+TimeLimiter[1s]'
+        //by default: ReactiveCircuitBreaker in Spring Cloud already includes 'TimeLimiter[1sec]'
     }
 
     //@CircuitBreaker - uses Spring AOP.

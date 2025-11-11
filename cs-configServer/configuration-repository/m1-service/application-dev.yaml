@@ -1,10 +1,7 @@
 logging.level:
   com.home.m1service: TRACE
 
-cs:
-  m1Name: name1devG1
-  url:
-    m2service: http://m2service:8080
-    m3service: http://m3service:8080
-  some1:
-    myParam: param1devG1x
+cs.properties:
+  m-name: IamDevX
+  m2-service-url: http://m2service:7070
+  m3-service-url: http://m3service:9090

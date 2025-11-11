@@ -2,7 +2,6 @@ package com.home.m2service.task;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +11,7 @@ import java.io.IOException;
 
 @Slf4j
 @RestController
-public class Controller {
-    @Value("${cs.m2Name}")
-    private String m2Name;
-    @Value("${cs.forall}")
-    private String forAll;
+public class M2Controller {
 
     @SneakyThrows
     @GetMapping("/ping")
@@ -26,11 +21,10 @@ public class Controller {
         log.info("m2:info");
         log.warn("m2:warn");
 
-        log.debug("received ping request...");
-        Thread.sleep(3000L);
-        log.debug("replying success {}", m2Name);
-        //if (Math.random() > 0.5) throw new IOException("simulated-m2-io");
-        return "pong2[%s, %s]".formatted(m2Name, forAll);
+        log.info("Controller2.ping ...");
+        Thread.sleep(2000L);
+        log.info("Controller2 pong");
+        return "pong2";
     }
 
     @SneakyThrows

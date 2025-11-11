@@ -1,9 +1,10 @@
 package com.home.m1service.task;
 
 import com.home.common.MyPersonDTO;
+import com.home.m1service.task.config.ConfigurationRegistry;
+import com.home.m1service.task.config.CsConfigurationPojo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,11 +13,10 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 @RequiredArgsConstructor //generate constructors ONLY for FINAL vars
-public class Controller {
+public class M1Controller {
     private final ConfigurationRegistry configurationRegistry;
+    private final CsConfigurationPojo csConfigurationPojo;
     private final Sender sender;
-    @Value("${cs.m1Name}") // One injection way. Another - see ConfigurationRegistry.class
-    private String m1Name;
 
     public String blockFallback(Throwable t) {
         return "Fallback [%s - %s]".formatted(t.getClass().getSimpleName(), t.getMessage());
@@ -24,7 +24,10 @@ public class Controller {
 
     @GetMapping("/block")
     public Mono<String> pingBlock() { //in webflux, method should always return Mono/Flux ( +never use .block() )
-        log.debug("pingBlock.start [{}, {}]", m1Name, configurationRegistry.getCustomConfig().get());
+        log.debug("pingBlock.start");
+        log.debug("csConfigurationPojo [{}, {}]", csConfigurationPojo.hashCode(), csConfigurationPojo);
+        log.debug("configurationRegistry [{}, {}, {}]", configurationRegistry.hashCode(),
+                configurationRegistry.getCsConfigurationPojo().hashCode(), configurationRegistry.getCsConfigurationPojo());
         return sender.callM3Service("/ping").doOnNext(r -> log.debug("pingBlock.finish: {}", r));
     }
 
@@ -40,7 +43,7 @@ public class Controller {
         Mono<String> m2Response = sender.callM2Service("/ping");
         Mono<String> m3Response = sender.callM3Service("/ping");
         return Mono.zip(m2Response, m3Response)
-                .map(set -> set.getT1() + " | " + set.getT2() + " | " + m1Name)
+                .map(set -> set.getT1() + " | " + set.getT2())
                 .map(this::finishMe)
                 .onErrorResume(RuntimeException.class, e -> {
                     log.error("ErrCaught in /ping processing", e);
