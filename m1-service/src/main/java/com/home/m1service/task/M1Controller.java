@@ -1,7 +1,6 @@
 package com.home.m1service.task;
 
 import com.home.common.MyPersonDTO;
-import com.home.m1service.task.config.ConfigurationRegistry;
 import com.home.m1service.task.config.CsConfigurationPojo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,20 +13,13 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequiredArgsConstructor //generate constructors ONLY for FINAL vars
 public class M1Controller {
-    private final ConfigurationRegistry configurationRegistry;
     private final CsConfigurationPojo csConfigurationPojo;
     private final Sender sender;
-
-    public String blockFallback(Throwable t) {
-        return "Fallback [%s - %s]".formatted(t.getClass().getSimpleName(), t.getMessage());
-    }
 
     @GetMapping("/block")
     public Mono<String> pingBlock() { //in webflux, method should always return Mono/Flux ( +never use .block() )
         log.debug("pingBlock.start");
         log.debug("csConfigurationPojo [{}, {}]", csConfigurationPojo.hashCode(), csConfigurationPojo);
-        log.debug("configurationRegistry [{}, {}, {}]", configurationRegistry.hashCode(),
-                configurationRegistry.getCsConfigurationPojo().hashCode(), configurationRegistry.getCsConfigurationPojo());
         return sender.callM3Service("/ping").doOnNext(r -> log.debug("pingBlock.finish: {}", r));
     }
 

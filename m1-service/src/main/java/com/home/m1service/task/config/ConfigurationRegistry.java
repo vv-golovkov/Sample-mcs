@@ -1,7 +1,6 @@
 package com.home.m1service.task.config;
 
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,15 +13,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
-@Getter //????????????????? (test this when @RefreshScope worked)
-@RequiredArgsConstructor
 @Configuration //automatically creates proxy via CGLIB. So, this class can NOT be a record.
-//@RequiredArgsConstructor(onConstructor_ = {@Qualifier})
-//@EnableConfigurationProperties({WebClientConfiguration.class, CustomConfiguration.class})
+@RequiredArgsConstructor
 @EnableConfigurationProperties({CsConfigurationPojo.class})
 public class ConfigurationRegistry {
-    //    private final WebClientConfigurationMarker webClientConfig;
-//    private final CustomConfigurationMarker customConfig;
     private final CsConfigurationPojo csConfigurationPojo;
 
     @Bean

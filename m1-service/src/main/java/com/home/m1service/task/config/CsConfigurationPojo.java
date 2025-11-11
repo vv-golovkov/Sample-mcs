@@ -7,7 +7,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Data
 @RefreshScope
 @ConfigurationProperties("cs.properties")
-public class CsConfigurationPojo {
+public class CsConfigurationPojo { //do not use RECORD, as @RefreshScope creates a proxy by extending the class
     private String mName;
     private String m2ServiceUrl;
     private String m3ServiceUrl;
