@@ -19,10 +19,10 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-starter-config</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -77,34 +77,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.openapitools</groupId>-->
-<!--				<artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--				<version>7.3.0</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>generate-models</id>-->
-<!--						<goals>-->
-<!--							<goal>generate</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<inputSpec>${project.basedir}/../openapi/person.yaml</inputSpec>-->
-<!--							<generatorName>java</generatorName>-->
-<!--							<library>spring-boot</library>-->
-<!--							<modelNameSuffix>DTO</modelNameSuffix>-->
-<!--							<output>${project.build.directory}/generated-sources/openapi</output>-->
-<!--							<modelPackage>com.home.m1service.model</modelPackage>-->
-<!--							<generateApis>false</generateApis>-->
-<!--							<generateModels>true</generateModels>-->
-<!--							<generateSupportingFiles>false</generateSupportingFiles>-->
-<!--							&lt;!&ndash;                            <configOptions>&ndash;&gt;-->
-<!--							&lt;!&ndash;                                <dateLibrary>java8</dateLibrary>&ndash;&gt;-->
-<!--							&lt;!&ndash;                                <java8>true</java8>&ndash;&gt;-->
-<!--							&lt;!&ndash;                            </configOptions>&ndash;&gt;-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
 		</plugins>
 	</build>
 

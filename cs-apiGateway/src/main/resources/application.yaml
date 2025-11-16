@@ -1,36 +1,56 @@
-logging.level:
-  # to reduce log noise
-  org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: WARN
+logging:
+  level:
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   application:
     name: cs-apiGateway
+  config:
+    import: "consul:"
   cloud:
+    consul:
+      host: cs-consul
+      port: 8500
+      config:
+        format: YAML
+        enabled: true
+        fail-fast: true
+        default-context: application
+      discovery:
+        enabled: true
+        register: true
+        prefer-ip-address: false
+        health-check-interval: 5s
+        health-check-path: /actuator/health
     gateway:
-      #      discovery:
-      #        locator:
-      #          enabled: true #eureka config
-      #          lower-case-service-id: true
-      # Тепер запит /m1service/** → Eureka шукає активний інстанс m1service.
-      # Якщо user-service перезапустився на новому порту, Gateway автоматично проксить на нову адресу.
       server:
         webflux:
-          routes:
-
-          - id: m1-service
-            uri: http://m1service:8080
-            predicates: [ Path=/m1/** ]
-            filters: [ StripPrefix=1 ]
-
-          - id: m2-service
-            uri: http://m2service:8080
-            predicates: [ Path=/m2/** ]
-            filters: [ StripPrefix=1 ]
-
-          - id: m3-service
-            uri: http://m3service:8080
-            predicates: [ Path=/m3/** ]
-            filters: [ StripPrefix=1 ]
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+#          routes: # optional: to use '/m1' instead of '/m1-service'
+#            - id: m1-service-id
+#              uri: lb://m1-service
+#              predicates: [ Path=/m1/** ]
+#              filters: [ StripPrefix=1 ]
+#            #            - id: m2-service-id
+#            #              uri: lb://m2-service
+#            #              predicates: [ Path=/m2/** ]
+#            #              filters: [ StripPrefix=1 ]
+#            - id: m3-service-id
+#              uri: lb://m3-service
+#              predicates: [ Path=/m3/** ]
+#              filters: [ StripPrefix=1 ]
 
   # Налаштування Spring Boot Actuator, яке визначає доступні ендпоінти через HTTP.
   # http://localhost:8090/actuator/health

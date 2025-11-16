@@ -1,4 +1,4 @@
-package com.home.m1service.task.config;
+package com.home.m3service.task;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,8 +7,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Data
 //@RefreshScope
 @ConfigurationProperties("cs.properties")
-public class CsConfigurationPojo { //do not use RECORD, as @RefreshScope creates a proxy by extending the class
+public class CsConfigurationPojo3 {
     private String mName;
+    private String m1ServiceUrl;
     private String m2ServiceUrl;
-    private String m3ServiceUrl;
 }

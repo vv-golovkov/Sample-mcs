@@ -1,0 +1,122 @@
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  consul_data:
+
+x-common-service: &common
+  # env_file: .env
+  networks: [ backend ]
+  restart: no # [no, always, on-failure, unless-stopped]
+  #  environment: [ TZ=Europe/Kyiv ] # by default - UTC
+  environment:
+    SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECK_PATH: /actuator/health
+    SPRING_CLOUD_CONSUL_HOST: cs-consul
+    SPRING_CLOUD_CONSUL_PORT: 8500
+    SPRING_PROFILES_ACTIVE: dev
+    TZ: Europe/Kyiv
+  healthcheck:
+    # test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+    test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+    interval: 5s
+    timeout: 3s
+    retries: 5
+    start_period: 20s
+
+services:
+
+  cs-consul:
+    image: hashicorp/consul:1.16.1
+    container_name: cs-consul
+    networks: [ backend ]
+    restart: no
+    ports: [ "8500:8500" ]
+    volumes: [ "consul_data:/consul/data" ]
+    # command: agent -dev -client=0.0.0.0 -ui --log-level=ERR
+    command: agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui --log-level=ERR
+    environment:
+      TZ: Europe/Kyiv
+    healthcheck:
+      # test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
+      test: [ "CMD-SHELL", "curl -f http://localhost:8500/v1/status/leader || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  m1-service:
+    <<: *common
+    build:
+      context: .
+      dockerfile: m1-service/Dockerfile
+    container_name: m1-service
+    ports: [ "8081:8080" ]
+    depends_on:
+      cs-consul:
+        condition: service_healthy
+    # гарантує лише порядок старту контейнерів
+    # [service_started, service_healthy, service_completed_successfully]
+  #    depends_on:
+  #      cs-config-server: # гарантує лише порядок старту контейнерів
+  #        condition: service_healthy # [service_started, service_healthy, service_completed_successfully]
+
+  #  m2-service:
+  #    <<: *common
+  #    build: ./m2-service
+  #    container_name: m2-service
+  #    ports: [ "8082:8080" ]
+  #    depends_on:
+  #      cs-consul:
+  #        condition: service_healthy
+  #  #    depends_on:
+  #  #      cs-config-server:
+  #  #        condition: service_healthy
+
+  m3-service:
+    <<: *common
+    build:
+      context: .
+      dockerfile: m3-service/Dockerfile
+    container_name: m3-service
+    ports: [ "8083:8080" ]
+    depends_on:
+      cs-consul:
+        condition: service_healthy
+
+  cs-api-gateway:
+    networks: [ backend ]
+    restart: no # [no, always, on-failure, unless-stopped]
+    build: ./cs-apiGateway
+    container_name: cs-api-gateway
+    ports: [ "8090:8080" ]
+    environment:
+      TZ: Europe/Kyiv
+      SPRING_CLOUD_CONSUL_HOST: cs-consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+    #    depends_on: [ m1-service, m2-service, m3-service ]
+    depends_on:
+      cs-consul:
+        condition: service_healthy
+      m1-service:
+        condition: service_healthy
+      m3-service:
+        condition: service_healthy
+
+#  cs-config-server:
+#    networks: [ backend ]
+#    restart: no # [no, always, on-failure, unless-stopped]
+#    # перезаписує профіль в '.env', бо має свої власні [native, git]
+#    environment: [ SPRING_PROFILES_ACTIVE=git ] # ПРІОРИТЕТИ: environment(найвищий) -> .env -> application.yml
+#    build:
+#      context: .
+#      dockerfile: cs-configServer/Dockerfile
+#    container_name: cs-config-server
+#    ports: [ "8888:8080" ]
+#    healthcheck:
+#      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ] # localhost !!!
+#      interval: 4s
+#      timeout: 3s
+#      retries: 5
+#      start_period: 8s
+

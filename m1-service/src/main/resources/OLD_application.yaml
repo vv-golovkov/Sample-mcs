@@ -8,74 +8,23 @@
 # logging.level.root: INFO #для вісх пакетів, для яких нижче НЕ задано рівень
 # -----
 
-#logging:
-#  level:
-#    root: INFO
-#    org.springframework.cloud.config.client.ConfigServerConfigDataLoader: WARN
-#  pattern:
-#    console: "%d{d-MMM-yyyy HH:mm:ss.SSS}ms1 [%thread] [%-5level | %logger{1}]@> %msg%n"
-# %location, %method, %line, %file, @caller - very expensive!
-# %mdc{requestId} - analog for %X in log4j
-
-management:
-  tracing:
-    enabled: true
-    sampling:
-      probability: 1.0 # % of requests to be traced (0.0 - 1.0)
-  zipkin:
-    enabled: false
-  simple:
-    metrics:
-      export:
-        enabled: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    #    loggers:
-    #      access: ALL # WAS -> enabled: true # (for '/actuator/loggers/{}' only)
-    #    metrics:
-    #      access: ALL # was -> enabled: true
-    health:
-      show-details: always
-
-springdoc:
-  swagger-ui:
-    enabled: true
-    # http://host:port/swagger-ui/index.html (append '?urls.primaryName=m1doc' for specific controller)
-  api-docs:
-    enabled: true
-    # http://host:port/v3/api-docs (append '.yaml' to download) - All controllers in the project
-  group-configs:
-    - group: m1doc
-      paths-to-match:
-        - /api/m1doc/**
-    # http://host:port/v3/api-docs/m1doc - only for controller/s specified in 'paths-to-match'
-    # the 'paths-to-match' should match with @RequestMapping on specific controller
-
 spring:
   application:
     name: m1-service
-  config:
-    import: "consul:"
+    # SPRING_CONFIG_IMPORT - already defined as environment variable in '.env'
   cloud:
     consul:
       host: cs-consul
       port: 8500
-      config:
-        format: YAML
-        enabled: true
-        fail-fast: true
-        default-context: application
       discovery:
         enabled: true
         register: true
-        prefer-ip-address: false
-        health-check-interval: 5s
-        # catalog-services-watch-delay: 1000
-        health-check-path: /actuator/health
-        # health-check-url: http://m1service:8080/actuator/health
+#        service-name: ${spring.application.name} # Назва сервісу, під якою він буде зареєстрований
+      config:
+        enabled: true
+        format: YAML
+        prefix: config #default
+        fail-fast: false # def=true (consul fails if no keys found)
 
 
 # http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.slow.calls?tag=name:circuitBreakerForM2ServiceCall

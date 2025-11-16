@@ -10,21 +10,10 @@ spring:
       config:
         format: YAML
         enabled: true
-        fail-fast: true
         default-context: application
       discovery:
         enabled: true
         register: true
-        prefer-ip-address: false
+        prefer-ip-address: true
         health-check-interval: 5s
         health-check-path: /actuator/health
-        # health-check-url: http://m3service:8080/actuator/health
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: always

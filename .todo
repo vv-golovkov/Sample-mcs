@@ -1,12 +1,11 @@
 1.ELK stack (+ traceId/spanId) -> (does not work, may be due to webflux?)
+2.Vault: secret storage
 
 -maven cache
 -custom healthCheck (by impl HealthIndicator/ReactiveHealthIndicator)
--refresh configServer: use another option -> ( consul, jdbc, Vault[for secrets] )
 ==================================================================
-3.SAGA
-4.Configure service discovery
-7.Configure load balancing
+8.SAGA
+9.Configure load balancing
 10.Implement security best practices (e.g., OAuth, JWT)
 11.Implement data synchronization between services
 12.Set up CI/CD pipeline for microservices

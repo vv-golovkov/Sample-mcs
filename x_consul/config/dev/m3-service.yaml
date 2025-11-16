@@ -1,0 +1,3 @@
+cs.properties:
+  m1-service-url: http://m1-service
+  m2-service-url: http://m2-service
