@@ -1,8 +1,5 @@
 1.ELK stack (+ traceId/spanId) -> (does not work, may be due to webflux?)
-2.Vault: secret storage
-
 -maven cache
--custom healthCheck (by impl HealthIndicator/ReactiveHealthIndicator)
 ==================================================================
 8.SAGA
 9.Configure load balancing

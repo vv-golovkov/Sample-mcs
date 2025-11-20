@@ -18,6 +18,9 @@
 # %mdc{requestId} - analog for %X in log4j
 
 management:
+  health:
+    consulHealthCheck: # name of my custom healthIndicator bean (custom healthcheck)
+      enabled: true
   tracing:
     enabled: true
     sampling:
@@ -58,7 +61,9 @@ spring:
   application:
     name: m1-service
   config:
-    import: "consul:"
+    import:
+      - "consul:"
+      - "vault:"
   cloud:
     consul:
       host: cs-consul
@@ -76,6 +81,15 @@ spring:
         # catalog-services-watch-delay: 1000
         health-check-path: /actuator/health
         # health-check-url: http://m1service:8080/actuator/health
+    vault:
+      enabled: true
+      uri: http://${SPRING_CLOUD_VAULT_HOST}:8200
+      token: ${SPRING_CLOUD_VAULT_TOKEN} # authentication (for DEV only)
+      kv:
+        enabled: true
+        backend: secret
+        profile-separator: /
+        default-context: application
 
 
 # http://localhost:8081/actuator/metrics/resilience4j.circuitbreaker.slow.calls?tag=name:circuitBreakerForM2ServiceCall

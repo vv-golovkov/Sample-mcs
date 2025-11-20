@@ -1,7 +1,10 @@
-# dynamic update the configuration parameters (@RefreshScope)
+# open docker container and exec, whether an image has the 'curl/wget' or any other command:
+sh -c 'command -v curl >/dev/null 2>&1 && echo "TheCommand-found!" || echo "TheCommand-NotFound!"'
+# --------------------------------------------------------------------------------
+# dynamic update the configuration parameters via actuator@RefreshScope.
 curl -X POST http://localhost:8090/m1/actuator/refresh
 # --------------------------------------------------------------------------------
-# dynamic update the logging leve (ROOT+custom)
+# dynamic update the logging leve via actuator@RefreshScope (ROOT+custom).
 curl -X POST http://localhost:8090/m1/actuator/loggers/ROOT \
 -H "Content-Type: application/json" \
 -d '{"configuredLevel":"debug"}'
@@ -10,6 +13,7 @@ curl -X POST http://localhost:8090/m1/actuator/loggers/com.home.m1service \
 -H "Content-Type: application/json" \
 -d '{"configuredLevel":"WARN"}'
 
+# NOTE: in consul, the update is automatically picked up, without actuator@RefreshScope.
 # verify
 http://localhost:8090/m1/actuator/loggers/ROOT
 http://localhost:8090/m1/actuator/loggers/com.home.m1service

@@ -13,15 +13,25 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- logging -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-brave</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <!-- for @Async/Kafka/Scheduling/WebFlux/Future -->
+            <artifactId>context-propagation</artifactId>
+        </dependency>
+        <!-- logging -->
     </dependencies>
 
 </project>

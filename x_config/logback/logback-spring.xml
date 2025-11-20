@@ -12,7 +12,7 @@
     <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk}"/>
     <property name="POD_NAME" value="${POD_NAME:-unk}"/>
 
-    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+    <appender name="TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <includeMdcKeyName>traceId</includeMdcKeyName>
@@ -28,25 +28,9 @@
         </encoder>
     </appender>
 
-    <!-- not needed for ELK stack, as logs should be sent directly to Logstash via TCP/UDP -->
-    <!--    <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
-    <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
-    <!--            <includeMdcKeyName>traceId</includeMdcKeyName>-->
-    <!--            <includeMdcKeyName>spanId</includeMdcKeyName>-->
-    <!--            <customFields>-->
-    <!--                {-->
-    <!--                "app": "${SERVICE_NAME}",-->
-    <!--                "profile": "${ACTIVE_PROFILE}",-->
-    <!--                "git": "${GIT_COMMIT}",-->
-    <!--                "pod": "${POD_NAME}"-->
-    <!--                }-->
-    <!--            </customFields>-->
-    <!--        </encoder>-->
-    <!--    </appender>-->
-
     <root level="${LOGGING_LEVEL_ROOT}">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="LOGSTASH"/>
+        <appender-ref ref="TCP"/>
     </root>
 
 </configuration>

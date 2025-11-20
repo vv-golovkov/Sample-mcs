@@ -2,7 +2,9 @@ spring:
   application:
     name: m3-service
   config:
-    import: "consul:"
+    import:
+    - "consul:"
+    - "vault:"
   cloud:
     consul:
       host: cs-consul
@@ -19,6 +21,15 @@ spring:
         health-check-interval: 5s
         health-check-path: /actuator/health
         # health-check-url: http://m3service:8080/actuator/health
+    vault:
+      enabled: true
+      uri: http://${SPRING_CLOUD_VAULT_HOST}:8200
+      token: ${SPRING_CLOUD_VAULT_TOKEN}
+      kv:
+        enabled: true
+        backend: secret
+        profile-separator: /
+        default-context: application
 
 management:
   endpoints:

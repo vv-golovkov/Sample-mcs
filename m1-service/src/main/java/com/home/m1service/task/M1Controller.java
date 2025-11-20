@@ -1,8 +1,10 @@
 package com.home.m1service.task;
 
+import com.home.common.MyPersonDTO;
 import com.home.m1service.task.config.CsConfigurationPojo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class M1Controller {
     private final CsConfigurationPojo csConfigurationPojo;
     private final Sender1 sender;
+    @Value("${other.pwd}")
+    private String otherPwd; //it is not refreshable within this Controller, but works with Vault!
 
     @GetMapping("/hi")
     public String hi() {
@@ -35,7 +39,7 @@ public class M1Controller {
         log.debug("m1:debug");
         log.info("m1:info");
         log.warn("m1:warn");
-        log.debug("csConfigurationPojo [{}, {}]", csConfigurationPojo.hashCode(), csConfigurationPojo);
+        log.debug("POJO [{}, {}, {}]", otherPwd, csConfigurationPojo, new MyPersonDTO("vg", 24));
         if (csConfigurationPojo.getM3ServiceUrl() == null) {
             return ResponseEntity.ok("M3 URL is null");
         }

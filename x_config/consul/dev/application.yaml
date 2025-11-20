@@ -3,6 +3,7 @@ logging:
     root: INFO
     com.home.m1service: DEBUG
     com.home.m3service: TRACE
+    org.springframework.cloud.vault: DEBUG
   pattern:
     console: "%d{d-MMM-yyyy HH:mm:ss.SSS}ms [%thread] [%-5level | %logger{1}]@> %msg%n" # static
 

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @Data
-//@RefreshScope
+@RefreshScope
 @ConfigurationProperties("cs.properties")
 public class CsConfigurationPojo3 {
     private String mName;

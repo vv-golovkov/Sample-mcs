@@ -4,6 +4,8 @@ networks:
 
 volumes:
   consul_data:
+  vault_data:
+  elasticsearch-data:
 
 x-common-service: &common
   # env_file: .env
@@ -11,20 +13,100 @@ x-common-service: &common
   restart: no # [no, always, on-failure, unless-stopped]
   #  environment: [ TZ=Europe/Kyiv ] # by default - UTC
   environment:
+    SPRING_PROFILES_ACTIVE: dev
     SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECK_PATH: /actuator/health
     SPRING_CLOUD_CONSUL_HOST: cs-consul
     SPRING_CLOUD_CONSUL_PORT: 8500
-    SPRING_PROFILES_ACTIVE: dev
+    SPRING_CLOUD_VAULT_HOST: cs-vault
+    SPRING_CLOUD_VAULT_TOKEN: root
+    LOGSTASH_HOST: cs-logstash
+    LOGSTASH_PORT: 5000
     TZ: Europe/Kyiv
   healthcheck:
-    # test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
     test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
     interval: 5s
+    retries: 10
     timeout: 3s
-    retries: 5
-    start_period: 20s
+    start_period: 10s
 
 services:
+
+  cs-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: cs-elasticsearch
+    environment:
+      TZ: Europe/Kyiv
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
+      xpack.security.enabled: false
+    networks: [ backend ]
+    restart: no
+    ports: [ "9200:9200" ]
+    volumes: [ "elasticsearch-data:/usr/share/elasticsearch/data" ]
+    # http://localhost:9200/_cat/indices?v -> check all indexes
+
+  cs-kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.0
+    container_name: cs-kibana
+    environment:
+      TZ: Europe/Kyiv
+      ELASTICSEARCH_HOSTS: http://cs-elasticsearch:9200
+      ELASTICSEARCH_SSL_VERIFICATIONMODE: none
+    networks: [ backend ]
+    restart: no
+    ports: [ "5601:5601" ]
+    depends_on:
+      - cs-elasticsearch
+
+  cs-logstash:
+    image: docker.elastic.co/logstash/logstash:8.15.0
+    container_name: cs-logstash
+    networks: [ backend ]
+    restart: no
+    ports: [ "5000:5000" ]
+    volumes: [ "./x_config/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro" ] # ro - readOnly
+    environment:
+      TZ: Europe/Kyiv
+      XPACK_MONITORING_ENABLED: false
+    depends_on:
+      - cs-elasticsearch
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "if command -v curl >/dev/null 2>&1 && curl -fsS http://localhost:9600/ >/dev/null 2>&1; then exit 0;
+         elif (exec 3>/dev/tcp/localhost/5000) >/dev/null 2>&1; then exit 0;
+         elif command -v nc >/dev/null 2>&1 && nc -z localhost 5000 >/dev/null 2>&1; then exit 0;
+         else exit 1;
+         fi"
+      ]
+      interval: 10s     # run healthcheck every X sec
+      retries: 10       # run healthcheck X times
+      timeout: 5s       # duration of healthcheck execution (if longer - fail)
+      start_period: 40s # during this period, docker runs healthcheck, but does not consider the failures
+
+
+  cs-vault:
+    image: hashicorp/vault:1.18
+    container_name: cs-vault
+    networks: [ backend ]
+    restart: no
+    ports: [ "8200:8200" ]
+    volumes: [ "vault_data:/vault/data" ]
+    # cap_add: [ IPC_LOCK ]
+    command: server -dev # -dev-listen-address="0.0.0.0:8200"
+    environment:
+      VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
+      VAULT_API_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: root
+      VAULT_UI: true
+      TZ: Europe/Kyiv
+    healthcheck:
+      test: [ "CMD", "vault", "status", "-address=http://127.0.0.1:8200" ]
+      # test: ["CMD-SHELL", "nc -z localhost 8200"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   cs-consul:
     image: hashicorp/consul:1.16.1
@@ -37,12 +119,12 @@ services:
     command: agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui --log-level=ERR
     environment:
       TZ: Europe/Kyiv
+    #theoretically, this can be removed, as we have ConsulHealthCheck class (in each mX-service).
     healthcheck:
-      # test: [ "CMD", "curl", "-f", "http://localhost:8500/v1/status/leader" ]
       test: [ "CMD-SHELL", "curl -f http://localhost:8500/v1/status/leader || exit 1" ]
-      interval: 5s
+      interval: 6s
       timeout: 3s
-      retries: 5
+      retries: 3
       start_period: 10s
 
   m1-service:
@@ -55,11 +137,10 @@ services:
     depends_on:
       cs-consul:
         condition: service_healthy
-    # гарантує лише порядок старту контейнерів
-    # [service_started, service_healthy, service_completed_successfully]
-  #    depends_on:
-  #      cs-config-server: # гарантує лише порядок старту контейнерів
-  #        condition: service_healthy # [service_started, service_healthy, service_completed_successfully]
+      cs-vault:
+        condition: service_healthy
+      cs-logstash:
+        condition: service_healthy
 
   #  m2-service:
   #    <<: *common
@@ -83,6 +164,10 @@ services:
     depends_on:
       cs-consul:
         condition: service_healthy
+      cs-vault:
+        condition: service_healthy
+      cs-logstash:
+        condition: service_healthy
 
   cs-api-gateway:
     networks: [ backend ]
@@ -94,9 +179,12 @@ services:
       TZ: Europe/Kyiv
       SPRING_CLOUD_CONSUL_HOST: cs-consul
       SPRING_CLOUD_CONSUL_PORT: 8500
-    #    depends_on: [ m1-service, m2-service, m3-service ]
+      SPRING_CLOUD_VAULT_HOST: cs-vault
+      SPRING_CLOUD_VAULT_TOKEN: root
     depends_on:
       cs-consul:
+        condition: service_healthy
+      cs-vault:
         condition: service_healthy
       m1-service:
         condition: service_healthy

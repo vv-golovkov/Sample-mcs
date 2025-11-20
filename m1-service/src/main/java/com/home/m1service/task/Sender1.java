@@ -55,6 +55,7 @@ public class Sender1 {
     }
 
     public ResponseEntity<String> callM3Service(String endpoint, Object... vars) {
+        log.info("restInterceptors: {}", rest.getInterceptors()); //LoadBalancerInterceptor
         return callService(pojo.getM3ServiceUrl(), endpoint, vars);
     }
 

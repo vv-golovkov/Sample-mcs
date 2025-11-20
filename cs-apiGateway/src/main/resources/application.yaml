@@ -38,24 +38,16 @@ spring:
             locator:
               enabled: true
               lower-case-service-id: true
-#          routes: # optional: to use '/m1' instead of '/m1-service'
-#            - id: m1-service-id
-#              uri: lb://m1-service
-#              predicates: [ Path=/m1/** ]
-#              filters: [ StripPrefix=1 ]
-#            #            - id: m2-service-id
-#            #              uri: lb://m2-service
-#            #              predicates: [ Path=/m2/** ]
-#            #              filters: [ StripPrefix=1 ]
-#            - id: m3-service-id
-#              uri: lb://m3-service
-#              predicates: [ Path=/m3/** ]
-#              filters: [ StripPrefix=1 ]
-
-  # Налаштування Spring Boot Actuator, яке визначає доступні ендпоінти через HTTP.
-  # http://localhost:8090/actuator/health
-  # http://localhost:8090/actuator/info (404 dy default, needs to be configured separately)
-  # http://localhost:8090/actuator/gateway/routes (працює тільки зі старим WebFlux Gateway маршрутизатором,
-  # тобто очікує spring.cloud.gateway.routes без server.webflux. Саме тому він зараз 404)
-#management: { endpoints: { web: { exposure: { include: health,info,gateway } } } }
-#eureka: { client: { service-url: { defaultZone: http://cs_eureka_server:8761/eureka } } }
+          routes: # optional: to use '/m1' instead of '/m1-service'
+            - id: m1-service-id
+              uri: lb://m1-service
+              predicates: [ Path=/m1/** ]
+              filters: [ StripPrefix=1 ]
+            #            - id: m2-service-id
+            #              uri: lb://m2-service
+            #              predicates: [ Path=/m2/** ]
+            #              filters: [ StripPrefix=1 ]
+            - id: m3-service-id
+              uri: lb://m3-service
+              predicates: [ Path=/m3/** ]
+              filters: [ StripPrefix=1 ]

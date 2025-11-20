@@ -6,11 +6,11 @@ COPY pom.xml .
 COPY cs-common ./cs-common/
 COPY m1-service ./m1-service/
 # COPY m1-service/pom.xml .
+COPY ./x_config/logback/logback-spring.xml ./m1-service/src/main/resources/
 RUN mvn clean install -DskipTests
 
 # RUN mvn dependency:go-offline -B
 # COPY m1-service/src ./src
-#  COPY logback-spring.xml /app/m1-service/src/main/resources
 # RUN mvn clean package -DskipTests
 
 # -----run
