@@ -17,6 +17,7 @@ NOTES:
 - ?
 ==================================================================
 -maven cache
+vg-cicd-ghcr-token(GHCR_TOKEN)=ghp_N9v4vj82AJ7mVGrGORDzauBQkt2KWWsc3Ow4qf
 ==================================================================
 11.Set up CI/CD pipeline
 12.Configure K8s
