@@ -1,0 +1,37 @@
+name: vg-ci-pipeline
+
+env:
+  PROFILE: dev
+  GIT_COMMIT: ${{ github.sha }}
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: vg-checkout-code
+        uses: actions/checkout@v5
+
+      - name: vg-setup-docker-build
+        uses: docker/setup-buildx-action@v3
+
+      - name: vg-build-m1service-image
+        run: |
+          docker build \
+          --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PROFILE=$PROFILE \
+          -t m1-service:${GIT_COMMIT} -f m1-service/Dockerfile .
+
+      - name: vg-build-m3service-image
+        run: |
+          docker build \
+          --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PROFILE=$PROFILE \
+          -t m3-service:${GIT_COMMIT} -f m3-service/Dockerfile .
+
+      - name: vg-build-apiGateway-image
+        run: |
+          docker build -t api-gateway:${GIT_COMMIT} -f cs-apiGateway/Dockerfile .

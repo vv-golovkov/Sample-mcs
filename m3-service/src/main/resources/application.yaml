@@ -20,7 +20,7 @@ spring:
         prefer-ip-address: false
         health-check-interval: 5s
         health-check-path: /actuator/health
-        # health-check-url: http://m3service:8080/actuator/health
+        instance-id: ${spring.application.name}-${HOSTNAME}
     vault:
       enabled: true
       uri: http://${SPRING_CLOUD_VAULT_HOST}:8200

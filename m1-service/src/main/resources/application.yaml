@@ -81,6 +81,7 @@ spring:
         # catalog-services-watch-delay: 1000
         health-check-path: /actuator/health
         # health-check-url: http://m1service:8080/actuator/health
+        instance-id: ${spring.application.name}-${HOSTNAME} # to distinguish different service-instances in Consul
     vault:
       enabled: true
       uri: http://${SPRING_CLOUD_VAULT_HOST}:8200

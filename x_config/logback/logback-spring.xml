@@ -9,8 +9,10 @@
     <springProperty name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="unk"/>
     <springProperty name="LOGGING_LEVEL_ROOT" source="logging.level.root" defaultValue="INFO"/>
     <!-- externals: Kubernetes, Docker, CI/CD -->
+    <!-- for custom props, use System.setProperty(name, val) in the class which implements ApplicationRunner -->
     <property name="GIT_COMMIT" value="${GIT_COMMIT:-unk}"/>
     <property name="POD_NAME" value="${POD_NAME:-unk}"/>
+    <property name="instance" value="${HOSTNAME:-unk}"/>
 
     <appender name="TCP" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>

@@ -13,7 +13,10 @@ x-common-service: &common
   restart: no # [no, always, on-failure, unless-stopped]
   #  environment: [ TZ=Europe/Kyiv ] # by default - UTC
   environment:
-    SPRING_PROFILES_ACTIVE: dev
+    # some parameters are taken from SHELL
+    POD_NAME: ${POD_NAME}
+    GIT_COMMIT: ${GIT_COMMIT}
+    SPRING_PROFILES_ACTIVE: ${PROFILE}
     SPRING_CLOUD_CONSUL_DISCOVERY_HEALTHCHECK_PATH: /actuator/health
     SPRING_CLOUD_CONSUL_HOST: cs-consul
     SPRING_CLOUD_CONSUL_PORT: 8500
@@ -24,9 +27,9 @@ x-common-service: &common
     TZ: Europe/Kyiv
   healthcheck:
     test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
-    interval: 5s
-    retries: 10
-    timeout: 3s
+    interval: 10s
+    retries: 15
+    timeout: 5s
     start_period: 10s
 
 services:
@@ -132,8 +135,9 @@ services:
     build:
       context: .
       dockerfile: m1-service/Dockerfile
-    container_name: m1-service
-    ports: [ "8081:8080" ]
+    # container_name: m1-service # not compatible with --scale
+    # ports: [ "8081:8080" ] # not compatible with --scale
+    ports: [ "8080" ]
     depends_on:
       cs-consul:
         condition: service_healthy
@@ -159,8 +163,9 @@ services:
     build:
       context: .
       dockerfile: m3-service/Dockerfile
-    container_name: m3-service
-    ports: [ "8083:8080" ]
+    # container_name: m3-service # not compatible with --scale
+    # ports: [ "8083:8080" ] # not compatible with --scale
+    ports: [ "8080" ]
     depends_on:
       cs-consul:
         condition: service_healthy

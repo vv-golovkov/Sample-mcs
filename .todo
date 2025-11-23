@@ -1,11 +1,25 @@
-1.ELK stack (+ traceId/spanId) -> (does not work, may be due to webflux?)
+NOTES:
+- Scale using Docker: в докер можна маштабувати все, окрім точки входу (apiGateway). Бо втратиться зовнішній порт 8090.
+  Що ж робити, коли apiGateway став вузьким місцем після маштабування функціональних мікросервісів m1/m2/m3/..?
+  Найкраще ріщення - підняти Traefik, і маштабувати apiGateway. Вузьке місце переїхало з одного контейнера в інший, але!
+  Traefik - 10 apiGateway по продуктивності. Він витримує набагато більший трафік, ніж Spring Boot (apiGateway).
+  Spring Boot Gateway - це Java/Netty/Reactor: тобто високе споживання memory, GC, heap fragmentation.
+  Traefik - написаний на Go, має event-loop модель, відповідно мізерний overhead.
+  Він оптимізований під reverse-proxy, а не під бізнес-логіку. Кращий за Nginx в плані інтеграції з Docker/Consul.
+  Spring Gateway має фільтри, маршрути, beans, dependency injection - все це важке. Traefik - дуже легкий.
+  Ідеальний для масштабування бекенд сервісів. Навіть один Traefik рідко коли стане bottleneck.
+  Для повного auto-scaling ingress потрібен K8s.
+- Docker Compose supports 'manual runtime scaling' (not autoscaling as in K8s).
+  Він не аналізує CPU/RAM, не створює/прибирає інстанси сам. Але...
+  ( docker compose up --scale m1service=4 ) - підніме додаткові / прибере зайві (контейнери).
+  При зменшенні scale, контейнер просто видаляється, контйейнер просто видаляється, не чекає завершення запитів.
+- Event Sourcing: журнал подій (audit trail). Ідея - не зберігати стан сервісу. А тільки факти/події, що відбулися.
+- ?
+==================================================================
 -maven cache
 ==================================================================
-8.SAGA
-9.Configure load balancing
-10.Implement security best practices (e.g., OAuth, JWT)
-11.Implement data synchronization between services
-12.Set up CI/CD pipeline for microservices
-13.Implement versioning for microservices
-14.Configure container orchestration (e.g., Kubernetes)
-15.Set up automated testing for microservices
+11.Set up CI/CD pipeline
+12.Configure K8s
+14.Implement security best practices (e.g., OAuth, JWT)
+15.Postgre, Mongo, Redis, Kafka
+16.Set up automated testing for microservices (spring testcontainers)
