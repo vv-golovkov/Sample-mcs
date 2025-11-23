@@ -6,8 +6,10 @@ env:
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    # - main
+    tags:
+      - 'R*'
 
 jobs:
   build:
@@ -20,18 +22,24 @@ jobs:
       - name: vg-setup-docker-build
         uses: docker/setup-buildx-action@v3
 
-      - name: vg-build-m1service-image
+      - name: vg-start-consul-vault
         run: |
-          docker build \
-          --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PROFILE=$PROFILE \
-          -t m1-service:${GIT_COMMIT} -f m1-service/Dockerfile .
+          docker compose up -d cs-consul cs-vault
 
-      - name: vg-build-m3service-image
+      - name: vg-load-kv-consul-vault
         run: |
-          docker build \
-          --build-arg GIT_COMMIT=$GIT_COMMIT --build-arg PROFILE=$PROFILE \
-          -t m3-service:${GIT_COMMIT} -f m3-service/Dockerfile .
+          chmod +x ./x_config/load-kv.sh
+          ./x_config/load-kv.sh
 
-      - name: vg-build-apiGateway-image
+      - name: vg-build-start-other-services
         run: |
-          docker build -t api-gateway:${GIT_COMMIT} -f cs-apiGateway/Dockerfile .
+          docker compose up --build -d --scale m1-service=2 --scale m3-service=2
+
+      - name: vg-show-running-containers
+        run: docker ps -a
+
+        # ----- Another option to run everything in one shot (but remove redundant lines from there) -----
+        # - name: vg-run-sh
+        # run: |
+        # chmod +x ./run.sh
+        # ./run.sh

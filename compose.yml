@@ -177,7 +177,9 @@ services:
   cs-api-gateway:
     networks: [ backend ]
     restart: no # [no, always, on-failure, unless-stopped]
-    build: ./cs-apiGateway
+    build:
+      context: .
+      dockerfile: cs-apiGateway/Dockerfile
     container_name: cs-api-gateway
     ports: [ "8090:8080" ]
     environment:
