@@ -182,7 +182,7 @@ services:
     build:
       context: .
       dockerfile: cs-apiGateway/Dockerfile
-    container_name: cs-api-gateway
+    # container_name: cs-api-gateway
     image: cs-api-gateway:latest
     ports: [ "8090:8080" ]
     environment:
