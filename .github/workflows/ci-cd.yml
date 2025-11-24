@@ -40,9 +40,9 @@ jobs:
 
       - name: vg-build-images
         run: |
-          docker compose build
+          docker compose -f compose.yml build
 
-      - name: show docker images
+      - name: vg-show-images
         run: docker images
 
       - name: vg-push-images
