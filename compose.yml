@@ -14,6 +14,9 @@ x-common-service: &common
   #  environment: [ TZ=Europe/Kyiv ] # by default - UTC
   environment:
     # some parameters are taken from SHELL
+    REGISTRY: ${REGISTRY}
+    IMAGE_NAMESPACE: ${IMAGE_NAMESPACE}
+    RELEASE_TAG: ${RELEASE_TAG}
     POD_NAME: ${POD_NAME}
     GIT_COMMIT: ${GIT_COMMIT}
     SPRING_PROFILES_ACTIVE: ${PROFILE}
@@ -137,7 +140,7 @@ services:
       dockerfile: m1-service/Dockerfile
     # container_name: m1-service # not compatible with --scale
     # ports: [ "8081:8080" ] # not compatible with --scale
-    image: m1-service:latest
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
     ports: [ "8080" ]
     depends_on:
       cs-consul:
@@ -166,7 +169,7 @@ services:
       dockerfile: m3-service/Dockerfile
     # container_name: m3-service # not compatible with --scale
     # ports: [ "8083:8080" ] # not compatible with --scale
-    image: m3-service:latest
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
     ports: [ "8080" ]
     depends_on:
       cs-consul:
@@ -183,7 +186,7 @@ services:
       context: .
       dockerfile: cs-apiGateway/Dockerfile
     # container_name: cs-api-gateway
-    image: cs-api-gateway:latest
+    image: ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
     ports: [ "8090:8080" ]
     environment:
       TZ: Europe/Kyiv

@@ -5,6 +5,7 @@ env:
   GIT_COMMIT: ${{ github.sha }}
   REGISTRY: ghcr.io
   IMAGE_NAMESPACE: ${{ github.repository_owner }}
+  RELEASE_TAG: ${{ github.event.release.tag_name }}
 
 on:
   release:
@@ -30,8 +31,7 @@ jobs:
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: vg-start-consul-vault
-        run: |
-          docker compose up -d cs-consul cs-vault
+        run: docker compose up -d cs-consul cs-vault
 
       - name: vg-load-kv-consul-vault
         run: |
@@ -39,37 +39,38 @@ jobs:
           ./x_config/load-kv.sh
 
       - name: vg-build-images
-        run: |
-          docker compose -f compose.yml build
-
-      - name: vg-show-images
-        run: docker images
+        run: docker compose build
 
       - name: vg-push-images
-        run: |
-          RELEASE_TAG=${{ github.event.release.tag_name }}
-          echo "Release tag = $RELEASE_TAG"
-          
-          # --- m1-service
-          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
-          docker tag m1-service ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
-          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
-          
-          # --- m3-service
-          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
-          docker tag m3-service ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
-          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
-          
-          # --- cs-api-gateway
-          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
-          docker tag cs-api-gateway ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
-          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
+        run: docker compose push
+
+      - name: vg-show-images
+        run: docker compose images
+
+#      - name: vg-push-images
+#        run: |
+#          echo "Release tag = $RELEASE_TAG"
+#
+#          # --- m1-service
+#          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
+#          docker tag m1-service ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
+#          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
+#
+#          # --- m3-service
+#          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
+#          docker tag m3-service ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
+#          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
+#
+#          # --- cs-api-gateway
+#          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
+#          docker tag cs-api-gateway ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
+#          docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
 
         # - name: vg-build-start-other-services
         # run: |
         # docker compose up --build -d --scale m1-service=2 --scale m3-service=2
 
-      - name: vg-show-running-containers
+      - name: vg-show-all-containers
         run: docker ps -a
 
         # ----- Another option to run everything in one shot (but remove redundant lines from there) -----
