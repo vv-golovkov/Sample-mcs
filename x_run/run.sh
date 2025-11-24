@@ -2,9 +2,12 @@
 set -e
 
 # temporary values
+export REGISTRY=local
+export IMAGE_NAMESPACE=dev
+export RELEASE_TAG=latest
 export PROFILE=dev
 export POD_NAME=pod
-export GIT_COMMIT=$(git rev-parse HEAD)
+export GIT_COMMIT=a1b2c3
 
 docker compose up -d cs-consul cs-vault
 echo "sleeping 2s..."

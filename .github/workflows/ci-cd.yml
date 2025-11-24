@@ -10,12 +10,6 @@ on:
   release:
     types:
       - published
-      # on:
-      # push:
-      # branches:
-      # - main
-      # tags:
-      # - 'R*'
 
 jobs:
   build:
@@ -54,14 +48,17 @@ jobs:
           echo "Release tag = $RELEASE_TAG"
           
           # --- m1-service
+          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
           docker tag m1-service ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
           docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m1-service:${RELEASE_TAG}
           
           # --- m3-service
+          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
           docker tag m3-service ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
           docker push ${REGISTRY}/${IMAGE_NAMESPACE}/m3-service:${RELEASE_TAG}
           
           # --- cs-api-gateway
+          # docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
           docker tag cs-api-gateway ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
           docker push ${REGISTRY}/${IMAGE_NAMESPACE}/cs-api-gateway:${RELEASE_TAG}
 
