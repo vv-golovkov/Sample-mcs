@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class M1Controller {
     private final CsConfigurationPojo csConfigurationPojo;
     private final Sender1 sender;
-    @Value("${other.pwd}")
-    private String otherPwd; //it is not refreshable within this Controller, but works with Vault!
+    //@Value("${other.pwd}") //it is not refreshable within this Controller, but works with Vault!
+    private String otherPwd;
 
     @GetMapping("/hi")
     public String hi() {

@@ -9,7 +9,7 @@ RUN mvn dependency:go-offline -B
 
 # COPY src ./src
 COPY m3-service/src ./src
-COPY ./x_config/logback/logback-spring.xml /app/src/main/resources
+# COPY ./x_config/logback/logback-spring.xml /app/src/main/resources
 
 RUN mvn clean package -DskipTests
 
