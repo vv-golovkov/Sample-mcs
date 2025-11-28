@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class M3Controller {
+    private final String INSTANCE = System.getenv().getOrDefault("HOSTNAME", "unk");
     private final Sender3 sender;
 
     @SneakyThrows
@@ -19,11 +20,8 @@ public class M3Controller {
         log.trace("m3:trace");
         log.debug("m3:debug");
         log.info("m3:info");
-        log.warn("m3:warn");
-
-        log.info("Controller3.ping ...");
+        log.warn("m3:warn [instance={}]", INSTANCE);
         Thread.sleep(3000L);
-        log.info("Controller3 pong");
         return "pong3";
     }
 
