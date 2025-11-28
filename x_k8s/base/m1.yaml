@@ -22,7 +22,7 @@ spec:
       #          command: [ 'sh', '-c', 'until nc -z cs-consul-service 8500; do echo "m1 is waiting for consul..."; sleep 2; done' ]
       containers:
         - name: m1-container
-          image: ghcr.io/vv-golovkov/m1-service:r10
+          image: ghcr.io/vv-golovkov/m1-service:r11
           ports:
             - containerPort: 8080
           env:

@@ -17,6 +17,10 @@ spring:
         enabled: true
         enableApi: true
         namespace: sample-mcs
+      discovery:
+        enabled: true
+        all-namespaces: false
+        namespace: sample-mcs
       reload:
         enabled: true
         mode: event

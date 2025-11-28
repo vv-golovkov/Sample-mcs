@@ -11,7 +11,7 @@ metadata:
   namespace: sample-mcs
 rules:
   - apiGroups: [ "" ]
-    resources: [ "pods", "configmaps", "secrets" ]
+    resources: [ "pods", "configmaps", "secrets", "services", "endpoints" ]
     verbs: [ "get", "list", "watch" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
