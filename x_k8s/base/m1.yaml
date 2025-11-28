@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: m1-service-deployment
+  namespace: sample-mcs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: m1-service
+  template:
+    metadata:
+      labels:
+        app: m1-service
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      #      initContainers:
+      #        - name: wait-for-consul
+      #          image: busybox
+      #          command: [ 'sh', '-c', 'until nc -z cs-consul-service 8500; do echo "m1 is waiting for consul..."; sleep 2; done' ]
+      containers:
+        - name: m1-container
+          image: ghcr.io/vv-golovkov/m1-service:r4
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            # - name: TZ
+              # value: Europe/Kyiv
+            # SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME=m1-service.sample-mcs.svc.cluster.local
+          # envFrom:,- configMapRef:,name: common-service-config
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10 # sec, wait before first check
+            periodSeconds: 8        # check each N-sec
+            timeoutSeconds: 5       # mark as failed if check execution is longer that N-sec
+            failureThreshold: 3     # pod stops processing requests if failed N-times
+          # livenessProbe: (optional: whether POD is alive or stuck)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: m1-service
+  namespace: sample-mcs
+spec:
+  type: ClusterIP
+  ports:
+    - name: http-api
+      protocol: TCP # (TCP - for HTTP/HTTPS; UDP - for DNS/gRPC)
+      port: 8080
+      targetPort: 8080
+      # better to not hardcode the 'nodePort'. Let k8s to auto-select it. The type=NodePort is enough.
+      # nodePort: 30081 # k8s supportable range[ 30000–32767 ]
+  selector:
+    app: m1-service

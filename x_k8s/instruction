@@ -1,0 +1,18 @@
+minikube dashboard
+./ghcr.sh
+minikube kubectl -- apply -f base/consul.yaml
+minikube kubectl -- port-forward svc/cs-consul-service 8501:8500 -n sample-mcs & (separate terminal, if without &)
+minikube tunnel (separate terminal)
+minikube kubectl -- apply -f base/
+---
+# minikube kubectl -- port-forward pod/m1-service-deployment 8081:8080 -n sample-mcs
+# minikube kubectl -- delete -f base/
+
+Logs:
+ minikube kubectl -- get pods -n sample-mcs
+ minikube kubectl -- logs -f m1-service-deployment-5b8d84797c-84dv8 -n sample-mcs
+------------------------------------------------------------------------------------------------------------------------
+links:
+ http://localhost:8501/ui/
+ http://127.0.0.1.nip.io/m1/hi
+ http://localhost/m1/hi

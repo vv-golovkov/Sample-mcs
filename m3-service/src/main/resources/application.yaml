@@ -3,10 +3,26 @@ spring:
     name: m3-service
   config:
     import:
-    - "optional:consul:"
-    - "optional:vault:"
+      - "optional:consul:"
+      - "optional:vault:"
+      - "optional:kubernetes:"
   cloud:
+    kubernetes:
+      enabled: true
+      config:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+      secrets:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+      reload:
+        enabled: true
+        mode: event
+        strategy: refresh
     consul:
+      enabled: false
       host: ${SPRING_CLOUD_CONSUL_HOST}
       port: ${SPRING_CLOUD_CONSUL_PORT}
       config:

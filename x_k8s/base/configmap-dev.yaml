@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: m1-service-dev
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    cs.properties:
+      m-name: m1devNa
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: m3-service-dev
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    cs.properties:
+      m-name: m3devNa
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-dev
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    logging:
+      level:
+        root: INFO
+        com.home.m1service: DEBUG
+        com.home.m3service: TRACE

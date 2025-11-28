@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-mcs-ingress
+  namespace: sample-mcs
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+    # - host: 192.168.49.2.nip.io # must be DNS, not IP (nip.io - free DNS service to auto-convert IP to DNS)
+    - http:
+        paths:
+          - path: /m1(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: m1-service
+                port:
+                  number: 8080
+          - path: /m3(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: m3-service
+                port:
+                  number: 8080
+
+#          - path: /consul(/|$)(.*)
+#            pathType: ImplementationSpecific
+#            backend:
+#              service:
+#                name: cs-consul-service
+#                port:
+#                  number: 8500

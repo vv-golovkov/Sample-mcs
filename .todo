@@ -1,23 +1,30 @@
 NOTES:
 - Scale using Docker: в докер можна маштабувати все, окрім точки входу (apiGateway). Бо втратиться зовнішній порт 8090.
-  Що ж робити, коли apiGateway став вузьким місцем після маштабування функціональних мікросервісів m1/m2/m3/..?
-  Найкраще ріщення - підняти Traefik, і маштабувати apiGateway. Вузьке місце переїхало з одного контейнера в інший, але!
-  Traefik - 10 apiGateway по продуктивності. Він витримує набагато більший трафік, ніж Spring Boot (apiGateway).
-  Spring Boot Gateway - це Java/Netty/Reactor: тобто високе споживання memory, GC, heap fragmentation.
-  Traefik - написаний на Go, має event-loop модель, відповідно мізерний overhead.
-  Він оптимізований під reverse-proxy, а не під бізнес-логіку. Кращий за Nginx в плані інтеграції з Docker/Consul.
-  Spring Gateway має фільтри, маршрути, beans, dependency injection - все це важке. Traefik - дуже легкий.
-  Ідеальний для масштабування бекенд сервісів. Навіть один Traefik рідко коли стане bottleneck.
-  Для повного auto-scaling ingress потрібен K8s.
+      Що ж робити, коли apiGateway став вузьким місцем після маштабування функціональних мікросервісів m1/m2/m3/..?
+      Найкраще ріщення - підняти Traefik, і маштабувати apiGateway. Вузьке місце переїхало з одного контейнера в інший, але!
+      Traefik - 10 apiGateway по продуктивності. Він витримує набагато більший трафік, ніж Spring Boot (apiGateway).
+      Spring Boot Gateway - це Java/Netty/Reactor: тобто високе споживання memory, GC, heap fragmentation.
+      Traefik - написаний на Go, має event-loop модель, відповідно мізерний overhead.
+      Він оптимізований під reverse-proxy, а не під бізнес-логіку. Кращий за Nginx в плані інтеграції з Docker/Consul.
+      Spring Gateway має фільтри, маршрути, beans, dependency injection - все це важке. Traefik - дуже легкий.
+      Ідеальний для масштабування бекенд сервісів. Навіть один Traefik рідко коли стане bottleneck.
+      Для повного auto-scaling ingress потрібен K8s.
 - Docker Compose supports 'manual runtime scaling' (not autoscaling as in K8s).
-  Він не аналізує CPU/RAM, не створює/прибирає інстанси сам. Але...
-  ( docker compose up --scale m1service=4 ) - підніме додаткові / прибере зайві (контейнери).
-  При зменшенні scale, контейнер просто видаляється, контйейнер просто видаляється, не чекає завершення запитів.
+      Він не аналізує CPU/RAM, не створює/прибирає інстанси сам. Але...
+      ( docker compose up --scale m1service=4 ) - підніме додаткові / прибере зайві (контейнери).
+      При зменшенні scale, контейнер просто видаляється, контйейнер просто видаляється, не чекає завершення запитів.
 - Event Sourcing: журнал подій (audit trail). Ідея - не зберігати стан сервісу. А тільки факти/події, що відбулися.
+- Spring Cloud Kubernetes: шукає конфіги в namespace за визначеним порядком пріоритету.
+      application -> базовий загальний конфіг для всіх сервісів.
+      application-${profile} -> загальний конфіг для всіх сервісів, але з урахуванням профілю (dev, prod).
+      ${spring.application.name} -> конфіг конкретного сервісу (m1-service, m2-service).
+      ${spring.application.name}-${profile} -> конфіг конкретного сервісу з урахуванням профілю (m1-service-dev, m1-service-prod).
+      Пріоритет такий: останній знайдений перекриває попередній.
+      Secret overlaps ConfigMap if same parameter found.
 - ?
 ==================================================================
 -maven cache
-vg-cicd-ghcr-token(GHCR_TOKEN)=ghp_N9v4vj82AJ7mVGrGORDzauBQkt2KWWsc3Ow4qf
+vg-cicd-ghcr-token(GHCR_TOKEN)=see ghcr.sh
 ==================================================================
 11.Set up CI/CD pipeline
 12.Configure K8s

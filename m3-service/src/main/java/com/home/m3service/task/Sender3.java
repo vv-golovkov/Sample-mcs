@@ -16,7 +16,7 @@ public class Sender3 {
 
     public ResponseEntity<String> callM1Service() {
         try {
-            log.debug("m1ServiceUrl={}", pojo.getM1ServiceUrl());
+            log.debug("pojo3={}", pojo);
             return rest.getForEntity(pojo.getM1ServiceUrl() + "/hi", String.class);
         } catch (Exception e) {
             log.error("ExceptionDuringCall", e);

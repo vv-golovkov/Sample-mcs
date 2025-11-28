@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: m3-service-deployment
+  namespace: sample-mcs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: m3-service
+  template:
+    metadata:
+      labels:
+        app: m3-service
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      #      initContainers:
+      #        - name: wait-for-consul
+      #          image: busybox
+      #          command: [ 'sh', '-c', 'until nc -z cs-consul-service 8500; do echo "m3 is waiting for consul..."; sleep 2; done' ]
+      containers:
+        - name: m3-container
+          image: ghcr.io/vv-golovkov/m3-service:r4
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            # - name: TZ
+              # value: Europe/Kyiv
+            # SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME=m3-service.sample-mcs.svc.cluster.local
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 8
+            timeoutSeconds: 5
+            failureThreshold: 3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: m3-service
+  namespace: sample-mcs
+spec:
+  type: NodePort
+  ports:
+    - name: http-api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: m3-service

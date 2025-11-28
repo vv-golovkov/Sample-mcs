@@ -64,8 +64,29 @@ spring:
     import:
       - "optional:consul:"
       - "optional:vault:"
+      - "optional:kubernetes:"
   cloud:
+    kubernetes:
+      # By default, enableApi=false:
+      # Spring Cloud Kubernetes expects ConfigMap/Secret to me mounted as volume into container (/config OR /secrets).
+      # For enableApi=true: it searches for ConfigMap/Secret in specified namespace by the following order-priority:
+      # -> application, application-${profile}, ${spring.application.name}, ${spring.application.name}-${profile}
+      # The last one overlaps the previous one (if any matches found).
+      enabled: true
+      config:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+      secrets:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+      reload:
+        enabled: true
+        mode: event # [ event, polling (uses 'period=60s') ]
+        strategy: refresh
     consul:
+      enabled: false
       host: ${SPRING_CLOUD_CONSUL_HOST}
       port: ${SPRING_CLOUD_CONSUL_PORT}
       config:

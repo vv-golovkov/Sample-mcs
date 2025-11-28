@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application
+  namespace: sample-mcs
+data:
+  # SPRING_CLOUD_CONSUL_HOST: cs-consul-service
+  # SPRING_CLOUD_CONSUL_PORT: "8500"
+  TZ: Europe/Kyiv
+  application.yaml: |
+    logging:
+      pattern:
+        console: "%d{d-MMM-yyyy HH:mm:ss.SSS}msK [%thread] [tr=%X{traceId}, sp=%X{spanId}] [%-5level | %logger{1}]@> %msg%n"
+    cs.properties:
+      m1-service-url: http://m1-service:8080
+      m2-service-url: http://m2-service:2222
+      m3-service-url: http://m3-service:8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: m1-service
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    cs.properties:
+      m-type: m1devTy
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: m3-service
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    cs.properties:
+      m-category: m3devCa

@@ -9,6 +9,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties("cs.properties")
 public class CsConfigurationPojo3 {
     private String mName;
+    private String mPass;
+    private String mCategory;
     private String m1ServiceUrl;
     private String m2ServiceUrl;
 }
