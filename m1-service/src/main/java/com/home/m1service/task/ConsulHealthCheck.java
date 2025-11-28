@@ -15,7 +15,7 @@ import java.util.Map;
 //do not forget to enable it in the 'application.yaml' for each service (management.health.consulHealthCheck=true).
 //does not affect the start order of Docker containers.
 //do not use this approach, if start-containers-order is important! (use it as additional approach)
-@Component
+//@Component - works only if consul.enabled=true AND management.health.consulHealthCheck.enabled=true in yaml.
 @RequiredArgsConstructor
 public class ConsulHealthCheck implements HealthIndicator { //ReactiveHealthIndicator (WEBFLUX)
     private final ConsulClient consulClient;

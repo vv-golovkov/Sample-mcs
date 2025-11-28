@@ -10,7 +10,8 @@ minikube kubectl -- apply -f base/
 
 Logs:
  minikube kubectl -- get pods -n sample-mcs
- minikube kubectl -- logs -f m1-service-deployment-5b8d84797c-84dv8 -n sample-mcs
+ minikube kubectl -- logs -f m1-service-deployment-566676bf99-dztxz -n sample-mcs
+ minikube kubectl -- logs -f m3-service-deployment-d86f8f8d9-dpssf -n sample-mcs
 ------------------------------------------------------------------------------------------------------------------------
 links:
  http://localhost:8501/ui/

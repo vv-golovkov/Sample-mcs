@@ -20,7 +20,7 @@
 management:
   health:
     consulHealthCheck: # name of my custom healthIndicator bean (custom healthcheck)
-      enabled: true
+      enabled: false
   tracing:
     enabled: true
     sampling:
