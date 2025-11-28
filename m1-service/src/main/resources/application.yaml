@@ -82,7 +82,7 @@ spring:
         enableApi: true
         namespace: sample-mcs
       discovery:
-        enabled: true
+        enabled: false # disable (requires rbac+access in k8s)
         all-namespaces: false
         namespace: sample-mcs
       reload:
