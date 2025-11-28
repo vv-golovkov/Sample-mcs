@@ -53,6 +53,9 @@ spring:
         default-context: application
 
 management:
+  health:
+    kubernetes:
+      enabled: false
   endpoints:
     web:
       exposure:

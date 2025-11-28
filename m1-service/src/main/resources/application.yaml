@@ -19,6 +19,8 @@
 
 management:
   health:
+    kubernetes:
+      enabled: false # minikube is slow, this will avoid using Fabric8HealthIndicator each time I check a health
     consulHealthCheck: # name of my custom healthIndicator bean (custom healthcheck)
       enabled: false
   tracing:
