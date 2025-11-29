@@ -3,7 +3,6 @@ logging:
     root: INFO
     org.springframework.cloud: DEBUG
     org.springframework.cloud.context.scope: INFO
-    org.springframework.cloud.kubernetes: DEBUG
 
 spring:
   application:
@@ -20,7 +19,9 @@ spring:
         enabled: true
         enableApi: true
         namespace: sample-mcs
-        include-profile-specific-sources: false
+        includeProfileSpecificSources: true
+        sources:
+          - name: application
       secrets:
         enabled: true
         enableApi: true

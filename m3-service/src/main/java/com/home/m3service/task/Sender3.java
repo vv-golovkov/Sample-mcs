@@ -17,6 +17,9 @@ public class Sender3 {
     public ResponseEntity<String> callM1Service() {
         try {
             log.info("pojo3={}", pojo);
+            if (pojo.getM1ServiceUrl() == null) {
+                return ResponseEntity.ok("M1 URL is null");
+            }
             return rest.getForEntity(pojo.getM1ServiceUrl() + "/hi", String.class);
         } catch (Exception e) {
             log.error("ExceptionDuringCall", e);
