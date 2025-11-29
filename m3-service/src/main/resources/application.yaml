@@ -5,7 +5,7 @@ spring:
     import:
       - "optional:consul:"
       - "optional:vault:"
-      - "optional:kubernetes:"
+      - "kubernetes:"
   cloud:
     kubernetes:
       enabled: true

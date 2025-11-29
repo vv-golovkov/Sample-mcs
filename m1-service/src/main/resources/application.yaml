@@ -66,14 +66,16 @@ spring:
     import:
       - "optional:consul:"
       - "optional:vault:"
-      - "optional:kubernetes:"
+      - "kubernetes:"
   cloud:
     kubernetes:
-      # By default, enableApi=false:
+      # 1) By default, enableApi=false:
       # Spring Cloud Kubernetes expects ConfigMap/Secret to me mounted as volume into container (/config OR /secrets).
       # For enableApi=true: it searches for ConfigMap/Secret in specified namespace by the following order-priority:
       # -> application, application-${profile}, ${spring.application.name}, ${spring.application.name}-${profile}
       # The last one overlaps the previous one (if any matches found).
+      # 2) SpringCloudK8s does not require explicit URI.
+      # It uses KUBERNETES_SERVICE_HOST:KUBERNETES_SERVICE_PORT that K8s automatically adds to POD env (10.96.0.1:443).
       enabled: true
       config:
         enabled: true
