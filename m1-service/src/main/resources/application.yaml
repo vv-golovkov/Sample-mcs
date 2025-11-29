@@ -81,9 +81,11 @@ spring:
         enabled: true
         enableApi: true
         namespace: sample-mcs
-        includeProfileSpecificSources: true # read m1-service-dev.yaml in addition to m1-service.yaml (default)
-#        sources:
-#          - name: application # read default files (application.yaml, application-{profile}.yaml)
+        name: ${spring.application.name}
+        includeProfileSpecificSources: true # read sources that end with '-{profile}'
+        sources:
+          - name: application # read default spring files (application.yaml, application-{profile}.yaml)
+          - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
       secrets:
         enabled: true
         enableApi: true
