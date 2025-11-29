@@ -1,11 +1,19 @@
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud: DEBUG
+    org.springframework.cloud.kubernetes: DEBUG
+    org.springframework.cloud.kubernetes.client.config: DEBUG
+    org.springframework.cloud.kubernetes.client.secrets: DEBUG
+
 spring:
   application:
     name: m3-service
   config:
     import:
+      - "kubernetes:"
       - "optional:consul:"
       - "optional:vault:"
-      - "kubernetes:"
   cloud:
     kubernetes:
       enabled: true
@@ -13,6 +21,7 @@ spring:
         enabled: true
         enableApi: true
         namespace: sample-mcs
+        include-profile-specific-sources: true
       secrets:
         enabled: true
         enableApi: true
@@ -31,7 +40,7 @@ spring:
       port: ${SPRING_CLOUD_CONSUL_PORT}
       config:
         format: YAML
-        enabled: true
+        enabled: false
         fail-fast: true
         default-context: application
       discovery:
@@ -47,7 +56,7 @@ spring:
       uri: http://${SPRING_CLOUD_VAULT_HOST}:8200
       token: ${SPRING_CLOUD_VAULT_TOKEN}
       kv:
-        enabled: true
+        enabled: false
         backend: secret
         profile-separator: /
         default-context: application
