@@ -19,7 +19,7 @@ public class ConfigurationRegistry1 {
     private final CsConfigurationPojo csConfigurationPojo;
 
     @Bean
-    @LoadBalanced
+    //@LoadBalanced - requires 'discovery.enabled=true' (in Consul/K8s)
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }

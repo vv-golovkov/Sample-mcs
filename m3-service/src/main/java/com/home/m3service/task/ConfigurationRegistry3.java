@@ -3,6 +3,7 @@ package com.home.m3service.task;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.scope.refresh.RefreshScopeRefreshedEvent;
 import org.springframework.context.annotation.Bean;
@@ -18,10 +19,10 @@ public class ConfigurationRegistry3 {
     private final CsConfigurationPojo3 csConfigurationPojo;
 
     @Bean
-    @LoadBalanced
+    //@LoadBalanced - requires 'discovery.enabled=true' (in Consul/K8s)
     //can invoke WITH port as usually (http://m1-service:8080), and WITHOUT port (http://m1-service)
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 
     @EventListener(RefreshScopeRefreshedEvent.class)
