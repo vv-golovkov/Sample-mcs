@@ -39,7 +39,7 @@ public class M1Controller {
         log.debug("m1:debug");
         log.info("m1:info");
         log.warn("m1:warn [instance={}]", INSTANCE);
-        log.debug("POJO [{}, {}, {}]", otherPwd, csConfigurationPojo, new MyPersonDTO("vg", 24));
+        log.info("POJO [{}, {}, {}]", otherPwd, csConfigurationPojo, new MyPersonDTO("vg", 24));
         if (csConfigurationPojo.getM3ServiceUrl() == null) {
             return ResponseEntity.ok("M3 URL is null");
         }

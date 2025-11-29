@@ -27,7 +27,7 @@ public class M3Controller {
 
     @GetMapping("/call1")
     public ResponseEntity<String> callM1Service() {
-        log.debug("M3Controller.callM1Service() invoked");
+        log.info("M3Controller.callM1Service() invoked");
         return sender.callM1Service();
     }
 }
