@@ -19,8 +19,8 @@
 
 management:
   health:
-#    kubernetes:
-#      enabled: false # minikube is slow, this will avoid using Fabric8HealthIndicator each time I check a health
+    kubernetes:
+      enabled: false # minikube is slow, this will avoid using Fabric8HealthIndicator each time I check a health
     consulHealthCheck: # name of my custom healthIndicator bean (custom healthcheck)
       enabled: false
   tracing:
@@ -68,7 +68,8 @@ spring:
       - "optional:consul:"
       - "optional:vault:"
   cloud:
-#    kubernetes:
+    # theoretically, whole cloud.kubernetes section can be moved to 'configmap-k8s.yaml' as *-kubernetes profile
+    kubernetes:
       # 1) By default, enableApi=false:
       # Spring Cloud Kubernetes expects ConfigMap/Secret to me mounted as volume into container (/config OR /secrets).
       # For enableApi=true: it searches for ConfigMap/Secret in specified namespace by the following order-priority:
@@ -76,28 +77,29 @@ spring:
       # The last one overlaps the previous one (if any matches found).
       # 2) SpringCloudK8s does not require explicit URI.
       # It uses KUBERNETES_SERVICE_HOST:KUBERNETES_SERVICE_PORT that K8s automatically adds to POD env (10.96.0.1:443).
-#      enabled: true
-#      config:
-#        enabled: true
-#        enableApi: true
-#        namespace: sample-mcs
-#        name: ${spring.application.name}
-#        includeProfileSpecificSources: true # read sources that end with '-{profile}'
-#        sources:
-#          - name: application # read default spring files (application.yaml, application-{profile}.yaml)
-#          - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
-#      secrets:
-#        enabled: true
-#        enableApi: true
-#        namespace: sample-mcs
-#      discovery:
-#        enabled: false # disable (requires rbac+access in k8s)
-#        all-namespaces: false
-#        namespace: sample-mcs
-#      reload:
-#        enabled: true
-#        mode: event # [ event, polling (uses 'period=60s') ]
-#        strategy: refresh
+      enabled: true
+      config:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+        name: ${spring.application.name}
+        includeProfileSpecificSources: true # read sources that end with '-{profile}'
+        sources:
+          - name: application # read default spring files (application.yaml, application-{profile}.yaml)
+          - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
+      secrets:
+        enabled: true
+        enableApi: true
+        namespace: sample-mcs
+      discovery:
+        enabled: false # disable (requires rbac+access in k8s)
+        all-namespaces: false
+        namespace: sample-mcs
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: polling # [ event, polling (uses 'period=1m') ]
+        period: 1m
     consul:
       enabled: false # disable if not use
       host: ${SPRING_CLOUD_CONSUL_HOST}
