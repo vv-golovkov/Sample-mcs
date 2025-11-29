@@ -20,8 +20,8 @@ spring:
         enableApi: true
         namespace: sample-mcs
         includeProfileSpecificSources: true
-        sources:
-          - name: application
+#        sources:
+#          - name: application
       secrets:
         enabled: true
         enableApi: true
