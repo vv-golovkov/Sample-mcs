@@ -1,7 +1,5 @@
 package com.home.m1service.task;
 
-import com.home.common.MyPersonDTO;
-import com.home.m1service.task.config.CsConfigurationPojo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,15 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor //generate constructors ONLY for FINAL vars
 public class M1Controller {
-    private final String INSTANCE = System.getenv().getOrDefault("HOSTNAME", "unk");
-    private final CsConfigurationPojo csConfigurationPojo;
-    private final Sender1 sender;
     //@Value("${other.pwd}") //it is not refreshable within this Controller, but works with Vault!
     private String otherPwd;
+    private final String INSTANCE = System.getenv().getOrDefault("HOSTNAME", "unk");
+    private final Sender1 sender;
 
-    @GetMapping("/hi")
-    public String hi() {
-        return "Hi - from M1";
+    @GetMapping("/ping")
+    public String ping() {
+        log.trace("m1:trace");
+        log.debug("m1:debug");
+        log.info("m1:info");
+        log.warn("m1:warn [instance={}]", INSTANCE);
+        return "pong1(%s)".formatted(INSTANCE);
     }
 
     @GetMapping("/cb/{p}")
@@ -32,17 +33,10 @@ public class M1Controller {
         return sender.callM2Service_circuitBreaker(p);
     }
 
-    @GetMapping("/block")
+    @GetMapping("/call3")
     //If using WebFlux - each method should always return Mono/Flux ( +never use .block() )
-    public ResponseEntity<String> pingBlock() {
-        log.trace("m1:trace");
-        log.debug("m1:debug");
-        log.info("m1:info");
-        log.warn("m1:warn [instance={}]", INSTANCE);
-        log.info("POJO [{}, {}, {}]", otherPwd, csConfigurationPojo, new MyPersonDTO("vg", 24));
-        if (csConfigurationPojo.getM3ServiceUrl() == null) {
-            return ResponseEntity.ok("M3 URL is null");
-        }
+    public ResponseEntity<String> callM3() {
+        log.info("M1Controller.callM3()...");
         return sender.callM3Service("/ping");
     }
 }

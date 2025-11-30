@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.context.scope.refresh.RefreshScopeRefreshedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,9 +13,9 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Configuration //automatically creates proxy via CGLIB. So, this class can NOT be a record.
 @RequiredArgsConstructor
-@EnableConfigurationProperties({CsConfigurationPojo.class})
+@EnableConfigurationProperties({CsConfigurationPojo1.class})
 public class ConfigurationRegistry1 {
-    private final CsConfigurationPojo csConfigurationPojo;
+    private final CsConfigurationPojo1 csConfigurationPojo;
 
     @Bean
     //@LoadBalanced - requires 'discovery.enabled=true' (in Consul/K8s)

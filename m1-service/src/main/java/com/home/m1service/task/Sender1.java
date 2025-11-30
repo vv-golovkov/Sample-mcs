@@ -1,6 +1,6 @@
 package com.home.m1service.task;
 
-import com.home.m1service.task.config.CsConfigurationPojo;
+import com.home.m1service.task.config.CsConfigurationPojo1;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
@@ -13,10 +13,10 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class Sender1 {
     private final CircuitBreaker circuitBreaker;
-    private final CsConfigurationPojo pojo;
+    private final CsConfigurationPojo1 pojo;
     private final RestTemplate rest;
 
-    public Sender1(RestTemplate rest, CsConfigurationPojo pojo,
+    public Sender1(RestTemplate rest, CsConfigurationPojo1 pojo,
                    CircuitBreakerFactory<?, ?> circuitBreakerFactory) {
         this.rest = rest;
         this.pojo = pojo;
@@ -61,7 +61,10 @@ public class Sender1 {
 
     private ResponseEntity<String> callService(String url, String endpoint, Object... vars) {
         try {
-            log.debug("url={}", url);
+            log.info("POJO_1={}", pojo);
+            if (url == null) {
+                return ResponseEntity.ok("Requested URL is null");
+            }
             return rest.getForEntity(url + endpoint, String.class, vars);
         } catch (Exception e) {
             log.error("ExceptionDuringCall", e);

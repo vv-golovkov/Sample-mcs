@@ -102,7 +102,7 @@ spring:
 #          - name: application
 #          - name: ${spring.application.name}
       discovery:
-        enabled: false # disable (requires rbac+access in k8s)
+        enabled: false # disable (k8s has its own DNS balancer)
         all-namespaces: false
         namespace: sample-mcs
     consul:

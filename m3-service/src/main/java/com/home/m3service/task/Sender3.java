@@ -14,13 +14,14 @@ public class Sender3 {
     private final RestTemplate rest;
     private final CsConfigurationPojo3 pojo;
 
-    public ResponseEntity<String> callM1Service() {
+    public ResponseEntity<String> callM1Service(String endpoint, Object... vars) {
+        String url = pojo.getM1ServiceUrl();
         try {
-            log.info("pojo3={}", pojo);
-            if (pojo.getM1ServiceUrl() == null) {
+            log.info("POJO_3={}", pojo);
+            if (url == null) {
                 return ResponseEntity.ok("M1 URL is null");
             }
-            return rest.getForEntity(pojo.getM1ServiceUrl() + "/hi", String.class);
+            return rest.getForEntity(url + endpoint, String.class, vars);
         } catch (Exception e) {
             log.error("ExceptionDuringCall", e);
             return ResponseEntity
