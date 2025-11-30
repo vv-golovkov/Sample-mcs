@@ -1,3 +1,10 @@
+logging:
+  level:
+    root: INFO
+    com.home.m1service: DEBUG
+    com.home.m3service: DEBUG
+    org.springframework.cloud.kubernetes: DEBUG
+
 spring:
   application:
     name: m3-service
@@ -21,7 +28,8 @@ spring:
       reload:
         enabled: true
         strategy: refresh
-        mode: event
+        mode: polling
+        period: 40s
 #      secrets:
 #        enabled: true
 #        enableApi: true

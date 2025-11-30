@@ -59,6 +59,13 @@ springdoc:
     # http://host:port/v3/api-docs/m1doc - only for controller/s specified in 'paths-to-match'
     # the 'paths-to-match' should match with @RequestMapping on specific controller
 
+logging:
+  level:
+    root: INFO
+    com.home.m1service: DEBUG
+    com.home.m3service: DEBUG
+    org.springframework.cloud.kubernetes: DEBUG
+
 spring:
   application:
     name: m1-service
@@ -90,8 +97,8 @@ spring:
       reload:
         enabled: true
         strategy: refresh
-        mode: event # [ event, polling (uses 'period=1m') ]
-        # period: 50s
+        mode: polling # [ event, polling (uses 'period=1m') ]
+        period: 40s
 #      secrets:
 #        enabled: true
 #        enableApi: true
