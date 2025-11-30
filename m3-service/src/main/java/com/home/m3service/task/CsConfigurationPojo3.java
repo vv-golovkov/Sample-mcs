@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
 
-@Slf4j
+//@Slf4j
 @Data
 @RefreshScope
 @ConfigurationProperties("cs.properties")
@@ -20,9 +20,9 @@ public class CsConfigurationPojo3 {
     private String m1ServiceUrl;
     private String m2ServiceUrl;
 
-    public void setMPass(String mPass) {
-        log.info("M3: Lombok has triggered for mPass-change [old={}; new={}]", this.mPass, mPass);
-        this.mPass = Optional.ofNullable(mPass)
-                .map(p -> new String(Base64.getDecoder().decode(p), StandardCharsets.UTF_8)).orElse(null);
-    }
+//    public void setMPass(String mPass) {
+//        log.info("M3: Lombok has triggered for mPass-change [old={}; new={}]", this.mPass, mPass);
+//        this.mPass = Optional.ofNullable(mPass)
+//                .map(p -> new String(Base64.getDecoder().decode(p), StandardCharsets.UTF_8)).orElse(null);
+//    }
 }

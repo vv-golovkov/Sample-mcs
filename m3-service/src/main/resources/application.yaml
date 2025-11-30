@@ -1,8 +1,6 @@
 logging:
   level:
     root: INFO
-    com.home.m1service: DEBUG
-    com.home.m3service: DEBUG
     org.springframework.cloud.kubernetes: DEBUG
 
 spring:
@@ -26,23 +24,23 @@ spring:
           - name: application
           - name: ${spring.application.name}
       secrets:
-        enabled: false
-        enableApi: false
-        namespace: sample-mcs
-#        name: ${spring.application.name}
-#        includeProfileSpecificSources: true
-#        sources:
-#          - name: application
-#          - name: ${spring.application.name}
-      reload:
         enabled: true
-        strategy: refresh
-        mode: polling
-        period: 40s
+        enableApi: true
+        namespace: sample-mcs
+        name: ${spring.application.name}
+        includeProfileSpecificSources: true
+        sources:
+          - name: application
+          - name: ${spring.application.name}
       discovery:
         enabled: false
         all-namespaces: false
         namespace: sample-mcs
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: polling
+        period: 1m
     consul:
       enabled: false
       host: ${SPRING_CLOUD_CONSUL_HOST}
