@@ -24,14 +24,14 @@ spring:
           - name: application
           - name: ${spring.application.name}
       secrets:
-        enabled: true
-        enableApi: true
-        namespace: sample-mcs
-        name: ${spring.application.name}
-        includeProfileSpecificSources: true
-        sources:
-          - name: application
-          - name: ${spring.application.name}
+        enabled: false
+        enableApi: false
+#        namespace: sample-mcs
+#        name: ${spring.application.name}
+#        includeProfileSpecificSources: true
+#        sources:
+#          - name: application
+#          - name: ${spring.application.name}
       discovery:
         enabled: false
         all-namespaces: false
