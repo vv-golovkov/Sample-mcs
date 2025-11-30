@@ -25,20 +25,20 @@ spring:
         sources:
           - name: application
           - name: ${spring.application.name}
-      reload:
-        enabled: true
-        strategy: refresh
-        mode: polling
-        period: 40s
-#      secrets:
-#        enabled: true
-#        enableApi: true
-#        namespace: sample-mcs
+      secrets:
+        enabled: false
+        enableApi: false
+        namespace: sample-mcs
 #        name: ${spring.application.name}
 #        includeProfileSpecificSources: true
 #        sources:
 #          - name: application
 #          - name: ${spring.application.name}
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: polling
+        period: 40s
       discovery:
         enabled: false
         all-namespaces: false

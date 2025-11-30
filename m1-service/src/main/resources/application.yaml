@@ -94,20 +94,20 @@ spring:
         sources:
           - name: application # read default spring files (application.yaml, application-{profile}.yaml)
           - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
-      reload:
-        enabled: true
-        strategy: refresh
-        mode: polling # [ event, polling (uses 'period=1m') ]
-        period: 40s
-#      secrets:
-#        enabled: true
-#        enableApi: true
-#        namespace: sample-mcs
+      secrets:
+        enabled: false
+        enableApi: false
+        namespace: sample-mcs
 #        name: ${spring.application.name}
 #        includeProfileSpecificSources: true
 #        sources:
 #          - name: application
 #          - name: ${spring.application.name}
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: polling # [ event, polling (uses 'period=1m') ]
+        period: 40s
       discovery:
         enabled: false # disable (k8s has its own DNS balancer)
         all-namespaces: false
