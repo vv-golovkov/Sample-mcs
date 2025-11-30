@@ -83,28 +83,28 @@ spring:
         enableApi: true
         namespace: sample-mcs
         name: ${spring.application.name}
-        includeProfileSpecificSources: true # read sources that end with '-{profile}'
+        includeProfileSpecificSources: true # read ConfigMaps that end with '-{profile}'
         sources:
           - name: application # read default spring files (application.yaml, application-{profile}.yaml)
           - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
-      secrets:
-        enabled: true
-        enableApi: true
-        namespace: sample-mcs
-        name: ${spring.application.name}
-        includeProfileSpecificSources: true
-        sources:
-          - name: application
-          - name: ${spring.application.name}
+        reload:
+          enabled: true
+          strategy: refresh
+          mode: event # [ event, polling (uses 'period=1m') ]
+          # period: 50s
+#      secrets:
+#        enabled: true
+#        enableApi: true
+#        namespace: sample-mcs
+#        name: ${spring.application.name}
+#        includeProfileSpecificSources: true
+#        sources:
+#          - name: application
+#          - name: ${spring.application.name}
       discovery:
         enabled: false # disable (requires rbac+access in k8s)
         all-namespaces: false
         namespace: sample-mcs
-      reload:
-        enabled: true
-        strategy: refresh
-        mode: polling # [ event, polling (uses 'period=1m') ]
-        period: 1m
     consul:
       enabled: false # disable if not use
       host: ${SPRING_CLOUD_CONSUL_HOST}
