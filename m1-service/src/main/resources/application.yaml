@@ -87,11 +87,11 @@ spring:
         sources:
           - name: application # read default spring files (application.yaml, application-{profile}.yaml)
           - name: ${spring.application.name} # read m1-service-dev.yaml in addition to m1-service.yaml (default)
-        reload:
-          enabled: true
-          strategy: refresh
-          mode: event # [ event, polling (uses 'period=1m') ]
-          # period: 50s
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: event # [ event, polling (uses 'period=1m') ]
+        # period: 50s
 #      secrets:
 #        enabled: true
 #        enableApi: true

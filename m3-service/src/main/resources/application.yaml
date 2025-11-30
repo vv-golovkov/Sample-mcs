@@ -18,10 +18,10 @@ spring:
         sources:
           - name: application
           - name: ${spring.application.name}
-        reload:
-          enabled: true
-          strategy: refresh
-          mode: event
+      reload:
+        enabled: true
+        strategy: refresh
+        mode: event
 #      secrets:
 #        enabled: true
 #        enableApi: true
