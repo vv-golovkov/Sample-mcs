@@ -11,22 +11,49 @@ on:
       - published
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
-      - name: vg-checkout-code
+      - name: ci-checkout-code
         uses: actions/checkout@v5
-      - name: vg-setup-docker-build
+      - name: ci-setup-docker
         uses: docker/setup-buildx-action@v3
-      - name: vg-login-ghcr
+      - name: ci-login-ghcr
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ env.IMAGE_NAMESPACE }}
           password: ${{ secrets.GHCR_TOKEN }}
-      - name: vg-build-images
+      - name: ci-build-images
         run: docker compose build
-      - name: vg-push-images
+      - name: ci-push-images
         run: docker compose push
-      - name: vg-show-images
+      - name: ci-show-images
         run: docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep "${IMAGE_NAMESPACE}"||echo "NtFnd"
+  cd:
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: cd-checkout
+        uses: actions/checkout@v5
+      - name: cd-setup-kubectl
+        uses: azure/setup-kubectl@v4
+      - name: cd-setup-kustomize
+        uses: imranismail/setup-kustomize@v1
+      - name: cd-configure-kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+      - name: cd-update-images
+        working-directory: ./x_k8s/base
+        run: |
+          kustomize edit set image ghcr.io/vv-golovkov/m1-service=ghcr.io/vv-golovkov/m1-service:${RELEASE_TAG}
+          kustomize edit set image ghcr.io/vv-golovkov/m3-service=ghcr.io/vv-golovkov/m3-service:${RELEASE_TAG}
+      - name: cd-apply-k8s
+        run: |
+          kubectl apply -k ./x_k8s/base
+      - name: cd-rollout-status
+        run: |
+          kubectl get deployments -n sample-mcs -o name | xargs -I {} kubectl rollout status {} -n sample-mcs
+          kubectl rollout status deployment/m1-service-deployment -n sample-mcs
+          kubectl rollout status deployment/m3-service-deployment -n sample-mcs

@@ -22,21 +22,22 @@ spec:
       #          command: [ 'sh', '-c', 'until nc -z cs-consul-service 8500; do echo "m1 is waiting for consul..."; sleep 2; done' ]
       containers:
         - name: m1-container
-          image: ghcr.io/vv-golovkov/m1-service:r11
+          # image: ghcr.io/vv-golovkov/m1-service:r30
+          image: ghcr.io/vv-golovkov/m1-service
           ports:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: dev
-            # - name: TZ
-              # value: Europe/Kyiv
+            - name: TZ
+              value: Europe/Kyiv
             # SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME=m1-service.sample-mcs.svc.cluster.local
           # envFrom:,- configMapRef:,name: common-service-config
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8080
-            initialDelaySeconds: 10 # sec, wait before first check
+            initialDelaySeconds: 240 # sec, wait before first check
             periodSeconds: 8        # check each N-sec
             timeoutSeconds: 5       # mark as failed if check execution is longer that N-sec
             failureThreshold: 3     # pod stops processing requests if failed N-times

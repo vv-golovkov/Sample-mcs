@@ -7,13 +7,32 @@ minikube kubectl -- apply -f base/
 ---
 # minikube kubectl -- port-forward pod/m1-service-deployment 8081:8080 -n sample-mcs
 # minikube kubectl -- delete -f base/
+---
+# Validate correctness of yml-lines inside configmap (e.g.: m3-service-dev)
+minikube kubectl -- get configmap application-dev -n sample-mcs -o jsonpath='{.data}'
 
 Logs:
  minikube kubectl -- get pods -n sample-mcs
- minikube kubectl -- logs -f m1-service-deployment-566676bf99-dztxz -n sample-mcs
- minikube kubectl -- logs -f m3-service-deployment-d86f8f8d9-dpssf -n sample-mcs
+ minikube kubectl -- logs -f m1-service-deployment-585bbfd6c5-5cch7 -n sample-mcs
+ minikube kubectl -- logs -f m3-service-deployment-5565d6d9c-fshqz -n sample-mcs
 ------------------------------------------------------------------------------------------------------------------------
-links:
+# Steps to get access from GitHub to K8s (to perform CD-process):
+# add 'microservices-account-token' to rbac.yaml (kind: Secret).
+minikube kubectl -- apply -f base/rbac.yaml
+minikube kubectl -- get secret microservices-account-token -n sample-mcs -o jsonpath='{.data.token}' | base64 --decode
+# the above command shows a token (~1000chars)
+minikube kubectl -- get secret microservices-account-token -n sample-mcs -o jsonpath='{.data.ca\.crt}' | base64 --decode > ca.crt
+# the above command will generate ca.crt file and put it to the folder, from where you run this command (e.g.: x_k8s).
+# the below command gets API‑endpoint minikube (example -> https://127.0.0.1:6443 or other port)
+minikube kubectl -- config view --minify -o jsonpath='{.clusters[0].cluster.server}'
+# Then, create kubeconfig.yaml (kind: Config) and carefully fill it with previously generated data.
+# Keep it separately from the rest manifest files. It should not ne applied by K8s. Only for copying to GitHub.
+------------------------------------------------------------------------------------------------------------------------
+links (internals: call m3 from m1 in code):
+ http://m3-service.sample-mcs.svc.cluster.local:8080 (if both microservices are NOT in the same NS)
+ http://m3-service:8080 (if both microservices are in the same NS)
+ http://m3-service (if using @LoadBalancer)
+links (externals):
  http://localhost:8501/ui/
  http://127.0.0.1.nip.io/m1/hi
  http://localhost/m1/hi
