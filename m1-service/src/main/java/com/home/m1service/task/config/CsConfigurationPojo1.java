@@ -1,9 +1,13 @@
 package com.home.m1service.task.config;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Slf4j
 @Data
@@ -16,11 +20,19 @@ public class CsConfigurationPojo1 { //do not use RECORD, as @RefreshScope create
     private String m2ServiceUrl;
     private String m3ServiceUrl;
 
-    /* example: just in case
-    public void setMPass(String mPass) {
-        log.info("M1: Lombok has triggered for mPass-change [old={}; new={}]", this.mPass, mPass);
-        this.mPass = Optional.ofNullable(mPass)
-                .map(p -> new String(Base64.getDecoder().decode(p), StandardCharsets.UTF_8)).orElse(null);
+//    public void setMPass(String mPass) {
+//        log.info("M1.setMPass: Lombok has triggered for mPass-change [old={}; new={}]", this.mPass, mPass);
+//        if (mPass != null) {
+//            this.mPass = new String(Base64.getDecoder().decode(mPass), StandardCharsets.UTF_8);
+//        }
+//    }
+
+    @PostConstruct
+    private void decodeBase64() {
+        log.info("M1.decodeBase64: @PostConstruct [old={}; new={}]", this.mPass, mPass);
+        if (mPass != null) {
+            mPass = new String(Base64.getDecoder().decode(mPass), StandardCharsets.UTF_8);
+        }
+        // General option: create annotation @Base64, mark needed fields, decode using reflection (getDeclaredFields)
     }
-     */
 }

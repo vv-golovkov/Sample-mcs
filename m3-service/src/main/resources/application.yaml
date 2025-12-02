@@ -1,35 +1,30 @@
-logging:
-  level:
-    root: INFO
-    org.springframework.cloud.kubernetes: DEBUG
-
 spring:
   application:
     name: m3-service
   config:
     import:
-      - "kubernetes:"
+      - "optional:kubernetes:"
       - "optional:consul:"
       - "optional:vault:"
-  cloud: # -> MOVED TO 'configmap-k8s.yaml': default k8s profile 'application-kubernetes' for all services
+  cloud:
     kubernetes:
-#      enabled: true
+      enabled: true
       config:
-#        enabled: true
-#        enableApi: true
+        enabled: true
+        enableApi: true
         namespace: sample-mcs
         name: ${spring.application.name}
         includeProfileSpecificSources: true
         sources:
           - name: application
           - name: ${spring.application.name}
-#      secrets:
-#        enabled: false
-#        enableApi: false
-#      discovery:
-#        enabled: false
-#        all-namespaces: false
-#      reload:
+      secrets:
+        enabled: false
+        enableApi: false
+      discovery:
+        enabled: false
+        all-namespaces: false
+#      reload: # -> MOVED TO 'configmap-k8s.yaml': default k8s profile 'application-kubernetes' for all services
 #        enabled: true
 #        strategy: refresh
 #        mode: polling
@@ -62,9 +57,9 @@ spring:
         default-context: application
 
 management:
-#  health:
-#    kubernetes:
-#      enabled: false
+  health:
+    kubernetes:
+      enabled: false
   endpoints:
     web:
       exposure:
