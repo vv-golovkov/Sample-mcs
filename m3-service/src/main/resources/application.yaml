@@ -12,35 +12,29 @@ spring:
       - "optional:consul:"
       - "optional:vault:"
   cloud: # -> MOVED TO 'configmap-k8s.yaml': default k8s profile 'application-kubernetes' for all services
-    kubernetes:
-      enabled: true
-      config:
-        enabled: true
-        enableApi: true
-        namespace: sample-mcs
-        name: ${spring.application.name}
-        includeProfileSpecificSources: true
-        sources:
-          - name: application
-          - name: ${spring.application.name}
-      secrets:
-        enabled: false
-        enableApi: false
+#    kubernetes:
+#      enabled: true
+#      config:
+#        enabled: true
+#        enableApi: true
 #        namespace: sample-mcs
 #        name: ${spring.application.name}
 #        includeProfileSpecificSources: true
 #        sources:
 #          - name: application
 #          - name: ${spring.application.name}
-      discovery:
-        enabled: false
-        all-namespaces: false
-        namespace: sample-mcs
-      reload:
-        enabled: true
-        strategy: refresh
-        mode: polling
-        period: 1m
+#      secrets:
+#        enabled: false
+#        enableApi: false
+#      discovery:
+#        enabled: false
+#        all-namespaces: false
+#        namespace: sample-mcs
+#      reload:
+#        enabled: true
+#        strategy: refresh
+#        mode: polling
+#        period: 1m
     consul:
       enabled: false
       host: ${SPRING_CLOUD_CONSUL_HOST}
@@ -69,9 +63,9 @@ spring:
         default-context: application
 
 management:
-  health:
-    kubernetes:
-      enabled: false
+#  health:
+#    kubernetes:
+#      enabled: false
   endpoints:
     web:
       exposure:
