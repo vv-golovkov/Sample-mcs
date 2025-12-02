@@ -13,8 +13,8 @@ minikube kubectl -- get configmap application-dev -n sample-mcs -o jsonpath='{.d
 
 Logs:
  minikube kubectl -- get pods -n sample-mcs
- minikube kubectl -- logs -f m1-service-deployment-585bbfd6c5-5cch7 -n sample-mcs
- minikube kubectl -- logs -f m3-service-deployment-5565d6d9c-fshqz -n sample-mcs
+ minikube kubectl -- logs -f m1-service-deployment-77bb86f7c5-9m4vc -n sample-mcs
+ minikube kubectl -- logs -f m3-service-deployment-54c8bbcdb-6dk6n -n sample-mcs
 ------------------------------------------------------------------------------------------------------------------------
 # Steps to get access from GitHub to K8s (to perform CD-process):
 # add 'microservices-account-token' to rbac.yaml (kind: Secret).

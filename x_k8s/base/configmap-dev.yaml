@@ -13,7 +13,7 @@ data:
         org.springframework.cloud.kubernetes: INFO
     cs:
       properties:
-        m-pass: aG9obWEy
+        m-pass: djFnMg==
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -24,7 +24,7 @@ data:
   application.yaml: |
     cs:
       properties:
-        m-name: m1devNa_W
+        m-name: m1devNa
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -35,4 +35,4 @@ data:
   application.yaml: |
     cs:
       properties:
-        m-name: m3devNa_W
+        m-name: m3devNa

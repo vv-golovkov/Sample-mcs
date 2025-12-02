@@ -10,19 +10,16 @@ metadata:
   name: microservices-role
   namespace: sample-mcs
 rules:
-  # core(""): [pods,configmaps,secrets,services,namespaces,nodes,persistentvolumeclaims,persistentvolumes,persistentvolumes,events]
+  # apiGroups ->
+  # empty(""): [pods,configmaps,secrets,services,namespaces,nodes,persistentvolumeclaims,persistentvolumes,events]
   # apps: [deployments,replicasets,statefulsets,daemonsets,controllerrevisions]
   # autoscaling: [horizontalpodautoscalers]
   # batch: [jobs,cronjobs]
   # networking.k8s.io: [ingresses,networkpolicies]
   # etc ...
   - apiGroups: [ "" ]
-    resources: [ "pods", "configmaps", "secrets", "services" ]
-    verbs: [ "get", "list", "watch", "create", "update", "patch", "delete" ]
-
-  - apiGroups: [ "apps" ]
-    resources: [ "deployments", "replicasets" ]
-    verbs: [ "get", "list", "watch", "create", "update", "patch", "delete" ]
+    resources: [ "pods", "configmaps", "secrets" ]
+    verbs: [ "get", "list", "watch" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding

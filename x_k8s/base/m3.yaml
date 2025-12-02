@@ -22,16 +22,12 @@ spec:
       #          command: [ 'sh', '-c', 'until nc -z cs-consul-service 8500; do echo "m3 is waiting for consul..."; sleep 2; done' ]
       containers:
         - name: m3-container
-          # image: ghcr.io/vv-golovkov/m3-service:r30
-          image: ghcr.io/vv-golovkov/m3-service
+          image: ghcr.io/vv-golovkov/m3-service:r34
           ports:
             - containerPort: 8080
-          env:
-            - name: SPRING_PROFILES_ACTIVE
-              value: dev
-            - name: TZ
-              value: Europe/Kyiv
-            # SPRING_CLOUD_CONSUL_DISCOVERY_HOSTNAME=m3-service.sample-mcs.svc.cluster.local
+          envFrom:
+            - configMapRef:
+                name: all
           readinessProbe:
             httpGet:
               path: /actuator/health

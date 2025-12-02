@@ -25,7 +25,7 @@ data:
   application.yaml: |
     cs:
       properties:
-        m-type: m1devTy_W
+        m-type: m1devTy
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -36,4 +36,4 @@ data:
   application.yaml: |
     cs:
       properties:
-        m-category: m3devCaNEWx
+        m-category: m3devCa

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: application-kubernetes
+  namespace: sample-mcs
+data:
+  application.yaml: |
+    spring:
+      cloud:
+        kubernetes:
+          reload:
+            enabled: true
+            strategy: refresh
+            mode: event # polling
+            # period: 1m
